@@ -53,7 +53,7 @@ class Login extends Component {
         path: '/',
         secur:true,
         // secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
-        sameSite: 'Strict' // Protect against CSRF attacks
+        sameSite: 'Lax' // Protect against CSRF attacks
       });
 
       // Redirect to home page after saving token
