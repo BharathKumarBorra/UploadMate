@@ -1,4 +1,5 @@
 import { Component } from "react";
+import Cookies from 'react-router-dom'
 import Header from "../Header";
 import RequestsFilter from "../RequestsFilter";
 import AccessibilitySection from "../AccessibilitySection";
@@ -44,9 +45,26 @@ class CreatorSection extends Component {
       loading: true,
       selectedFilter: status,
     });
+
+    const token = Cookies.get('token');
+
+    if (!token) {
+      console.error("No authentication token found");
+      this.props.history.push("/login"); // Redirect to login page
+      window.location.reload();
+
+      return;
+    }
+
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests?role=creator${status && `&req_status=${status}`}`
+        `${process.env.REACT_APP_BACKEND_URL}/requests?role=creator${status && `&req_status=${status}`}`,
+        {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        }
       );
       if (!response.ok) {
         this.setState({

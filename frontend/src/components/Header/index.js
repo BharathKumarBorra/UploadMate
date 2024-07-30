@@ -1,4 +1,5 @@
 import { Component } from "react";
+import Cookies from 'js-cookie';
 import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
@@ -30,6 +31,7 @@ import {
   StyledCopyImg,
 } from "./styledComponents";
 import { headerSectionContent, getSectionData } from "./languageContent";
+import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 const languagesList = [
   { language: "عربي", code: "AR" },
@@ -59,10 +61,31 @@ class Header extends Component {
     this.getUserDetails();
   }
 
-  getUserDetails = async () => {
+
+
+getUserDetails = async () => {
+
+  // Retrieve the JWT token from cookies
+  const token = Cookies.get('token');
+
+  if (!token) {
+    console.error("No authentication token found");
+    this.props.history.push("/login"); // Redirect to login page
+    return;
+  }
+  
+  try {
+    
     const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/user/details`
+      `${process.env.REACT_APP_BACKEND_URL}/user/details`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`, 
+        },
+      }
     );
+
     if (response.ok) {
       const finalData = await response.json();
       console.log("final Data: ", finalData);
@@ -71,8 +94,14 @@ class Header extends Component {
         userName: finalData.displayName,
         invitationCode: finalData.invitationCode,
       });
+    } else {
+      console.error("Failed to fetch user details:", response.statusText);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+  }
+};
+
 
   onToggleLanguageContainer = () => {
     const { showLanguageContainer } = this.state;
@@ -112,13 +141,11 @@ class Header extends Component {
     });
   };
 
-  onLogout = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/logout`);
-    if (response.ok) {
-      //   window.location.reload(); // Reload the page
-      //   return <Redirect to="/login" />;
-      this.props.history.push("/login");
-    }
+  onLogout =  () => {
+    // Remove JWT token from cookies
+    Cookies.remove('token');
+
+    <Redirect to='/login'/>
   };
 
   copyToClipboard = () => {

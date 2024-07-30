@@ -8,19 +8,17 @@ const fs = require("fs");
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config(); // Loading environment variables
-const session = require("express-session");
-const SQLiteStore = require("connect-sqlite3")(session);
 const ejs = require("ejs");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy; //importing 'Strategy' class from passport-google-oauth20 module
+const GoogleStrategy = require("passport-google-oauth20").Strategy; // Importing 'Strategy' class from passport-google-oauth20 module
 const cors = require("cors");
 const FormData = require("form-data");
 const fetch = require("node-fetch");
+const jwt = require('jsonwebtoken');
 
-const app = express(); //express instance
+const app = express(); // Express instance
 
 app.use(express.json()); // Middleware to parse JSON payloads
-
 app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-encoded payloads
 
 app.set("trust proxy", true);
@@ -28,92 +26,18 @@ app.set("trust proxy", true);
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      `${process.env.FRONTEND_URL}`,
       "https://youtube-proxy-frontend.onrender.com",
-    ], // Allow requests from frontend running on localhost:3000
+    ], // Allow requests from frontend running on these origins
     methods: "GET,POST,PUT,DELETE",
     credentials: true, // Allow credentials (cookies, authorization headers)
   })
 );
 
-// Path to sessions database
-const sessionDBPath = path.join(__dirname, "database", "sessions.db");
-
-let db = null;
-// Initialize SQLite database and create sessions table if it doesn't exist
-async function initializeSessionDatabase() {
-  try {
-    db = await open({
-      filename: sessionDBPath,
-      driver: sqlite3.Database,
-    });
-
-    // Create sessions table if it does not exist
-    await db.exec(`
-      CREATE TABLE IF NOT EXISTS sessions (
-        sid TEXT PRIMARY KEY,
-        expires INTEGER,
-        sess TEXT
-      );
-    `);
-
-    console.log("Session database initialized");
-  } catch (error) {
-    console.error("Error initializing session database:", error);
-    throw error; // Re-throw to handle it in the calling context
-  }
-}
-
-initializeSessionDatabase();
-
-// Configuring session management using SQLite as session store
-const store = new SQLiteStore({
-  db: "sessions.db", // SQLite database file for storing sessions
-  table: "sessions", // Table name for storing session data
-  dir: path.join(__dirname, "database"), // Directory to save '.db' file
-  createDirIfNotExists: true, // Create directory if it doesn't exist
-});
-
-app.use(
-  session({
-    store: store,
-    secret: process.env.KEY,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: true, // Set to true in production for HTTPS
-      sameSite: "none",
-      maxAge: 30 * 24 * 60 * 60 * 1000, // Session valid for 30 days
-      domain: '.onrender.com', // Corrected placement
-      path:'/'
-    },
-    
-  })
-);
-
 // Initialize Passport and session handling
 app.use(passport.initialize());
-app.use(passport.session()); //integrating Passport.js with express-session to handle persistent login sessions by deserializing user information from the session on each request.
 
-// Middleware to set CORS headers for frontend communication
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://youtube-proxy-frontend.onrender.com"
-  ); // updating match the domain  will make the request from
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
 
-app.use((req, res, next) => {
-  console.log("Session ID:", req.sessionID);
-  console.log("Session Data:", req.session);
-  next();
-});
 
 // Configuring Google OAuth 2.0 Strategy for Passport
 passport.use(
@@ -140,6 +64,7 @@ passport.use(
         const email = profile.emails[0].value;
         const userImage = profile.photos[0].value;
         const userDisplayName = profile.displayName;
+
         // Checking if user already exists in database
         const userCheckQuery = `SELECT * FROM users WHERE email=?;`;
         const userResponse = await mdb.get(userCheckQuery, email);
@@ -170,7 +95,9 @@ passport.use(
           console.log(`User updated: ${userResponse.username}`);
         }
 
-        cb(null, email);
+        const user = { email }; // Create user object for JWT payload
+        const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '30d' });
+        return cb(null, { token }); // Pass the token instead of email
       } catch (err) {
         console.error("Error in GoogleStrategy:", err);
         cb(err, null);
@@ -179,28 +106,31 @@ passport.use(
   )
 );
 
-//Serialize use into session. i.e serializeUser saves user information into the session
-passport.serializeUser((email, cb) => {
-  console.log("serializing user:", email);
-  cb(null, email);
-});
 
-// Deserialize user from session .Together, they enable persistent user authentication across multiple requests in an Express.js application using Passport.js.
-passport.deserializeUser(async (email, cb) => {
-  console.log("deserializing user:", email);
-  try {
-    const getUserDetailsQuery = `SELECT * FROM users WHERE email = ?;`;
-    const userDetailsObj = await mdb.get(getUserDetailsQuery, [email]);
-    if (!userDetailsObj) {
-      console.log("user not found");
-      throw new Error("User not found");
+// Redirect route after successful authentication
+app.get(
+  "/oauth/redirect",
+  passport.authenticate("google", { session: false }),
+  async (req, res) => {
+    if (!req.user || !req.user.token) {
+      return res.redirect(`${process.env.FRONTEND_URL}/login`);
     }
-    cb(null, userDetailsObj);
-  } catch (err) {
-    console.error("Error in deserializeUser:", err);
-    cb(err, null);
+    const token = req.user.token; // Extract token from req.user
+    console.log('token: ',token )
+    
+    // res.cookie('token', token, {
+    //   // httpOnly: true,
+    //   // secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
+    //   // sameSite: 'Strict', // Protect against CSRF attacks
+    //   maxAge: 3600000, // 1 hour
+    //   domain: 'localhost' // Set domain to your frontend domain if needed
+    // });
+
+    res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`); // Redirect to the frontend after setting the cookie
+  
+    // res.redirect(`http://localhost:3000?token=${token}`); // Send token to frontend
   }
-});
+);
 
 // Google OAuth authentication route
 app.get(
@@ -217,17 +147,6 @@ app.get(
     accessType: "offline", // Ensure 'accessType' is set to 'offline' for refresh tokens
     prompt: "consent select_account", // Add prompt to force account selection and consent
   })
-);
-
-// Redirect route after successful authentication
-app.get(
-  "/oauth/redirect",
-  passport.authenticate("google", {
-    failureRedirect: "https://youtube-proxy-frontend.onrender.com/login",
-  }),
-  async (request, response) => {
-    response.redirect("https://youtube-proxy-frontend.onrender.com");
-  }
 );
 
 // Configuring Cloudinary for file uploads
@@ -251,7 +170,7 @@ const upload = multer({
   storage,
 });
 
-/*...................... initializing SQLite database and starting server .............. */
+/*...................... Initializing SQLite database and starting server .............. */
 
 const dbPath = path.join(__dirname, "youtubetimer.db");
 let mdb = null;
@@ -263,33 +182,42 @@ const initializeDBAndServer = async () => {
     });
 
     app.listen(5000, () => {
-      console.log("server is running on http://localhost:5000");
+      console.log("Server is running on http://localhost:5000");
     });
   } catch (error) {
-    console.log(`error: ${error.message}`);
+    console.log(`Error: ${error.message}`);
     process.exit(1);
   }
 };
 
 initializeDBAndServer();
 
-// Middleware to check if the user is authenticated for backend
-const ensureAuthenticated = (request, response, next) => {
-  if (request.isAuthenticated()) {
-    return next();
+const ensureAuthenticated = async (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Authentication token missing' });
   }
 
-  response.redirect("/oauth/google"); // Redirect to Google OAuth if not authenticated
-};
+  const token = authHeader.split(' ')[1];
 
-const ensureAuthenticatedForFrontend = (request, response, next) => {
-  console.log("User: ", request.user);
-  console.log("request cookie:", request.headers.cookie);
-  if (request.isAuthenticated()) {
-    return next();
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { email } = decoded;
+    const getUserDetailsQuery = `SELECT * FROM users WHERE email = ?;`;
+    const userDetailsObj = await mdb.get(getUserDetailsQuery, [email]);
+
+    if (!userDetailsObj) {
+      console.log("User not found");
+      return res.redirect(`${process.env.FRONTEND_URL}/login`);
+    }
+
+    req.user = userDetailsObj; // Attach user information to request
+    next();
+  } catch (err) {
+    console.error("Token verification failed:", err);
+    res.redirect(`${process.env.FRONTEND_URL}/login`);
   }
-
-  response.send({ authenticated: false });
 };
 
 // Function to get new access token using refresh token
@@ -314,57 +242,57 @@ const getNewAccessToken = async (refreshToken) => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Error refreshing access token:", errorData);
-      return null; //Returning null on error
+      return null; // Returning null on error
     }
 
     const data = await response.json();
-    console.log("new AccessToken: ", data.access_token);
+    console.log("New access token:", data.access_token);
 
-    return data.access_token; // Returning new accessToken
+    return data.access_token; // Returning new access token
   } catch (error) {
     console.error("Error refreshing access token:", error);
-    return null; //Returning null on error
+    return null; // Returning null on error
   }
 };
 
-/*...................... CRUD OPERATIONS ................................. */
+/*...................... CRUD Operations ................................. */
 
-app.get("/user/details", async (request, response) => {
-  if (request.isAuthenticated()) {
-    console.log("user email", request.user.email);
+app.get('/oauth/status',ensureAuthenticated,async(req,res)=>{
+  res.send({authenticated:true })
+
+})
+
+app.get("/user/details", ensureAuthenticated, async (req, res) => {
+  try {
+    console.log("User email:", req.user.email);
     const query = `SELECT email, invitation_code, user_image, user_display_name FROM users WHERE email=?;`;
-    const dbResponse = await mdb.get(query, request.user.email);
+    const dbResponse = await mdb.get(query, req.user.email);
     console.log("dbResponse:", dbResponse);
-    response.json({
-      invitationCode: dbResponse.invitation_code,
-      userEmail: dbResponse.email,
-      userImage: dbResponse.user_image,
-      displayName: dbResponse.user_display_name,
-    });
+
+    if (dbResponse) {
+      res.json({
+        invitationCode: dbResponse.invitation_code,
+        userEmail: dbResponse.email,
+        userImage: dbResponse.user_image,
+        displayName: dbResponse.user_display_name,
+      });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// Logout route
-app.get("/logout", async (request, response) => {
-  request.logout((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      request.session.destroy(() => {
-        response.send("logged out successfully");
-      });
-    }
-  });
-});
 
-// Check authentication status
-app.get("/oauth/status", ensureAuthenticatedForFrontend, (req, res) => {
-  res.send({ authenticated: true, user: req.user });
-});
+
+
 
 // Request video upload
 app.post(
   "/upload-request",
+  ensureAuthenticated,
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "video", maxCount: 1 },
@@ -705,7 +633,7 @@ const downloadFromUrl = async (fileUrl, videoId, fileType) => {
 };
 
 // Route to upload video
-app.post("/upload-video", async (req, res) => {
+app.post("/upload-video",ensureAuthenticated, async (req, res) => {
   const { videoId } = req.body;
 
   console.log("video id is :", videoId);
@@ -907,27 +835,3 @@ app.post("/upload-video", async (req, res) => {
   }
 });
 
-app.get("/session-details", async (request, response) => {
-  try {
-    // Assuming `db` is properly initialized and connected to your SQLite database
-    const dbRequest = `SELECT * FROM sessions;`;
-    const dbResponse = await db.all(dbRequest);
-    response.send(dbResponse);
-    console.log(dbResponse);
-  } catch (error) {
-    console.error("Error fetching session details:", error);
-    response.status(500).send({ error: "Failed to retrieve session details" });
-  }
-});
-
-app.get("/sample-user-details", async (request, response) => {
-  try {
-    const dbRequest = `SELECT * FROM users;`;
-    const dbResponse = await mdb.all(dbRequest);
-    response.send(dbResponse);
-    console.log("user details", dbResponse);
-  } catch (error) {
-    console.error("Error fetching user details:", error);
-    response.status(500).send({ error: "Failed to retrieve user details" });
-  }
-});

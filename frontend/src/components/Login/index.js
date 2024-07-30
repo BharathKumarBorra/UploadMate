@@ -1,5 +1,6 @@
-import { Component } from "react";
-import { Redirect } from "react-router-dom";
+import React, { Component } from "react";
+import { Redirect, withRouter } from "react-router-dom";
+import Cookies from 'js-cookie';
 import { TailSpin } from "react-loader-spinner";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import AccessibilitySection from "../AccessibilitySection";
@@ -37,20 +38,46 @@ class Login extends Component {
   }
 
   componentDidMount() {
+    this.handleTokenFromUrl();
     this.checkAuthStatus();
   }
 
+  handleTokenFromUrl = () => {
+    const params = new URLSearchParams(this.props.location.search);
+    const token = params.get('token');
+
+    if (token) {
+      // Save token in a cookie
+      Cookies.set('token', token, { 
+        expires: 30, // Cookie expiry in days
+        path: '/',
+        secur:true,
+        // secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
+        sameSite: 'Strict' // Protect against CSRF attacks
+      });
+
+      // Redirect to home page after saving token
+      this.props.history.replace('/');
+    }
+  };
+
   checkAuthStatus = async () => {
+    const token = Cookies.get('token');
+    if (!token) {
+      this.setState({ loading: false });
+      return;
+    }
+
     try {
-      const response = await fetch(
-        "https://youtube-proxy-backend.onrender.com/oauth/status",
-        {
-          method: "GET",
-          credentials: "include", // Include cookies with the request
-        }
-      );
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/oauth/status`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`, // Add the token to the request headers
+        },
+      });
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         this.setState({
           isAuthenticated: data.authenticated,
           loading: false,
@@ -103,7 +130,7 @@ class Login extends Component {
         <HeaderContainer>
           <ProxyLogo
             alt="proxy-logo"
-            src="https://res.cloudinary.com/drbnxuf21/image/upload/v1721970847/b8lpaayftkzohhgrs6cl.png"
+            src="https://media-content.ccbp.in/website/ccbp_website_logos/nxtwave_header_logo.png"
           />
 
           <HeaderList className="header-list">
@@ -114,10 +141,7 @@ class Login extends Component {
               {contact}
             </HeaderItem>
             <HeaderItem ratio={fsr}>
-              <AnchorTag
-                href="https://youtube-proxy-backend.onrender.com/oauth/google"
-                sUl={sUl}
-              >
+              <AnchorTag href="http://localhost:5000/oauth/google" sUl={sUl}>
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
                   <SignInUserImg />
                   {signIn}
@@ -129,7 +153,7 @@ class Login extends Component {
 
               <MenuContainer show={showMenuContainer} ratio={fsr}>
                 <MenuItem className="menu-item menu-sign-in-item">
-                  <a href="https://youtube-proxy-backend.onrender.com/oauth/google">
+                  <a href="http://localhost:5000/oauth/google">
                     <SignInButton className="sign-in-button">
                       {signIn}
                     </SignInButton>
@@ -148,7 +172,7 @@ class Login extends Component {
             <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
             <LowerDescription ratio={fsr}>{lowerDescription}</LowerDescription>
 
-            <StyledAnchorTag href="https://youtube-proxy-backend.onrender.com/oauth/google">
+            <StyledAnchorTag href="http://localhost:5000/oauth/google">
               <GetStartedButton ratio={fsr}>
                 Get Started <StyledArrow />
               </GetStartedButton>
@@ -176,7 +200,6 @@ class Login extends Component {
             showUnderLines: sUl,
           } = value;
           const fsr = fontSizeRatio;
-          console.log(fontSizeRatio);
 
           return (
             <div className={`${showInGray && "show-in-gray"} bg-container`}>
@@ -192,4 +215,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
