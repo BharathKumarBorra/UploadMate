@@ -141,7 +141,7 @@ class Login extends Component {
               {contact}
             </HeaderItem>
             <HeaderItem ratio={fsr}>
-              <AnchorTag href="http://localhost:5000/oauth/google" sUl={sUl}>
+              <AnchorTag href={`${process.env.REACT_APP_BACKEND_URL}/oauth/google`} sUl={sUl}>
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
                   <SignInUserImg />
                   {signIn}
@@ -153,7 +153,7 @@ class Login extends Component {
 
               <MenuContainer show={showMenuContainer} ratio={fsr}>
                 <MenuItem className="menu-item menu-sign-in-item">
-                  <a href="http://localhost:5000/oauth/google">
+                  <a href={`${process.env.REACT_APP_BACKEND_URL}/oauth/google`}>
                     <SignInButton className="sign-in-button">
                       {signIn}
                     </SignInButton>
@@ -172,7 +172,7 @@ class Login extends Component {
             <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
             <LowerDescription ratio={fsr}>{lowerDescription}</LowerDescription>
 
-            <StyledAnchorTag href="http://localhost:5000/oauth/google">
+            <StyledAnchorTag href={`${process.env.REACT_APP_BACKEND_URL}/oauth/google`}>
               <GetStartedButton ratio={fsr}>
                 Get Started <StyledArrow />
               </GetStartedButton>
