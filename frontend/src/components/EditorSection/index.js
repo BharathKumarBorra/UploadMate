@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Cookies from 'js-cookie';
 import { withRouter } from "react-router-dom";
+import Cookies from 'js-cookie';
 import { ToastContainer, Slide, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";

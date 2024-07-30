@@ -1,6 +1,6 @@
 import { Component } from "react";
-import Cookies from 'js-cookie';
 import { withRouter } from "react-router-dom";
+import Cookies from 'js-cookie';
 import { toast } from "react-toastify";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import { IoMdClose } from "react-icons/io";
@@ -73,7 +73,7 @@ getUserDetails = async () => {
     this.props.history.push("/login"); // Redirect to login page
     return;
   }
-  
+
   try {
     
     const response = await fetch(

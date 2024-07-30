@@ -1,5 +1,5 @@
 import { Component } from "react";
-import Cookies from 'react-router-dom'
+import Cookies from 'js-cookie'
 import Header from "../Header";
 import RequestsFilter from "../RequestsFilter";
 import AccessibilitySection from "../AccessibilitySection";
