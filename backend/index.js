@@ -30,7 +30,6 @@ app.use(
   cors({
     origin: [
       `${process.env.FRONTEND_URL}`,
-      "https://youtube-proxy-frontend.onrender.com",
     ], // Allow requests from frontend running on these origins
     methods: "GET,POST,PUT,DELETE",
     credentials: true, // Allow credentials (cookies, authorization headers)
