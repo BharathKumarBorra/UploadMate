@@ -259,8 +259,32 @@ const getNewAccessToken = async (refreshToken) => {
 
 /*...................... CRUD Operations ................................. */
 
-app.get('/oauth/status',ensureAuthenticated,async(req,res)=>{
-  res.send({authenticated:true })
+app.get('/oauth/status',async(req,res)=>{
+  const token = req.cookies.token; // Get token from cookies
+  console.log('backend cookies: ',req.cookies)
+
+  console.log('token from cookies:',token)
+
+  if (!token) {
+    return res.send({authenticated:false })
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { email } = decoded;
+    const getUserDetailsQuery = `SELECT * FROM users WHERE email = ?;`;
+    const userDetailsObj = await mdb.get(getUserDetailsQuery, [email]);
+
+    if (!userDetailsObj) {
+      console.log("User not found");
+      return res.send({authenticated:false })
+    }
+
+    res.send({authenticated:true })
+  } catch (err) {
+    console.error("Token verification failed:", err);
+    res.send({authenticated:false })
+  }
 
 })
 
