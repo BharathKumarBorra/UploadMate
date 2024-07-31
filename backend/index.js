@@ -118,7 +118,7 @@ app.get(
     const token = req.user.token; // Extract token from req.user
 
     res.cookie('token', token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
       sameSite: 'Lax', // Protect against CSRF attacks
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
