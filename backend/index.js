@@ -118,13 +118,13 @@ app.get(
     const token = req.user.token; // Extract token from req.user
 
     res.cookie('token', token, {
-      httpOnly: true,
-      secure:true,
-      // secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
-      sameSite: 'Lax', // Protect against CSRF attacks
+      // httpOnly: true,
+      // secure:true,
+      // // secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
+      // sameSite: 'Lax', // Protect against CSRF attacks
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      domain: 'jwt-proxy-frontend.onrender.com', // Set this if you need to share cookies across subdomains
-      path:'/'
+      // domain: 'jwt-proxy-frontend.onrender.com', // Set this if you need to share cookies across subdomains
+      // path:'/'
     });
     
 
