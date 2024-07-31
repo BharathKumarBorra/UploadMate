@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Cookies from 'js-cookie';
 import { toast } from "react-toastify";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import { IoMdClose } from "react-icons/io";
@@ -31,7 +30,6 @@ import {
   StyledCopyImg,
 } from "./styledComponents";
 import { headerSectionContent, getSectionData } from "./languageContent";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 const languagesList = [
   { language: "عربي", code: "AR" },
@@ -65,14 +63,7 @@ class Header extends Component {
 
 getUserDetails = async () => {
 
-  // Retrieve the JWT token from cookies
-  const token = Cookies.get('token');
-
-  if (!token) {
-    console.error("No authentication token found");
-    this.props.history.push("/login"); // Redirect to login page
-    return;
-  }
+ 
 
   try {
     
@@ -80,10 +71,9 @@ getUserDetails = async () => {
       `${process.env.REACT_APP_BACKEND_URL}/user/details`,
       {
         method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`, 
-        },
+        credentials: "include", // Include cookies with the request
       }
+      
     );
 
     if (response.ok) {
@@ -143,9 +133,11 @@ getUserDetails = async () => {
 
   onLogout =  () => {
     // Remove JWT token from cookies
-    Cookies.remove('token');
+    // Cookies.remove('token');
 
-    <Redirect to='/login'/>
+    // this.props.history.replace('/login');
+
+     
   };
 
   copyToClipboard = () => {

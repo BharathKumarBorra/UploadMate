@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
@@ -10,13 +11,15 @@ const { v4: uuidv4 } = require("uuid");
 require("dotenv").config(); // Loading environment variables
 const ejs = require("ejs");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy; // Importing 'Strategy' class from passport-google-oauth20 module
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const cors = require("cors");
 const FormData = require("form-data");
 const fetch = require("node-fetch");
 const jwt = require('jsonwebtoken');
 
 const app = express(); // Express instance
+
+app.use(cookieParser()); // Middleware to parse cookies
 
 app.use(express.json()); // Middleware to parse JSON payloads
 app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-encoded payloads
@@ -36,8 +39,6 @@ app.use(
 
 // Initialize Passport and session handling
 app.use(passport.initialize());
-
-
 
 // Configuring Google OAuth 2.0 Strategy for Passport
 passport.use(
@@ -106,31 +107,30 @@ passport.use(
   )
 );
 
-
 // Redirect route after successful authentication
 app.get(
   "/oauth/redirect",
   passport.authenticate("google", { session: false }),
   async (req, res) => {
     if (!req.user || !req.user.token) {
-      return res.redirect(`${process.env.FRONTEND_URL}/login`);
+      return res.redirect(`${process.env.FRONTEND_URL}`);
     }
-    const token = req.user.token; // Extract token from req.user
-    console.log('token: ',token )
-    
-    // res.cookie('token', token, {
-    //   // httpOnly: true,
-    //   // secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
-    //   // sameSite: 'Strict', // Protect against CSRF attacks
-    //   maxAge: 3600000, // 1 hour
-    //   domain: 'localhost' // Set domain to your frontend domain if needed
-    // });
 
-    res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`); // Redirect to the frontend after setting the cookie
-  
-    // res.redirect(`http://localhost:3000?token=${token}`); // Send token to frontend
+    const token = req.user.token; // Extract token from req.user
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
+      sameSite: 'Lax', // Protect against CSRF attacks
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      domain: 'jwt-proxy-frontend.onrender.com' // Set this if you need to share cookies across subdomains
+    });
+    
+
+    res.redirect(`${process.env.FRONTEND_URL}`); // Redirect to the frontend after setting the cookie
   }
 );
+
 
 // Google OAuth authentication route
 app.get(
@@ -193,13 +193,14 @@ const initializeDBAndServer = async () => {
 initializeDBAndServer();
 
 const ensureAuthenticated = async (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const token = req.cookies.token; // Get token from cookies
+  console.log('backend cookies: ',req.cookies)
 
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Authentication token missing' });
+  console.log('token from cookies:',token)
+
+  if (!token) {
+    return res.redirect(`${process.env.FRONTEND_URL}/login`);
   }
-
-  const token = authHeader.split(' ')[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -219,6 +220,7 @@ const ensureAuthenticated = async (req, res, next) => {
     res.redirect(`${process.env.FRONTEND_URL}/login`);
   }
 };
+
 
 // Function to get new access token using refresh token
 const getNewAccessToken = async (refreshToken) => {

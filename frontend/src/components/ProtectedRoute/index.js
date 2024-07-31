@@ -1,27 +1,21 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import Cookies from 'js-cookie';
+import { Route } from "react-router-dom";
 
-// Example authentication function (replace with actual logic)
-const isAuthenticated = () => {
-  const token = Cookies.get('token');
-  console.log('token: ', token);
-  return !!token;
-};
+const ProtectedRoute=(props)=> {
+  
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
-  return (
-    <Route
-      
-      render={(props) =>
-        isAuthenticated() ? (
-          <Component {...rest} />
-        ) : (
-          <Redirect to="/login" />
-        )
-      }
-    />
-  );
-};
+
+
+    const { component: Component, ...rest } = props;
+    
+    return (
+      <Route
+        {...rest}
+        render={(props) =>
+         <Component {...props} /> 
+        }
+      />
+    );
+  
+}
 
 export default ProtectedRoute;

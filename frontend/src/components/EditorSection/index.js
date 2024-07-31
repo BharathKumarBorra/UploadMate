@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Cookies from 'js-cookie';
 import { ToastContainer, Slide, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
@@ -59,25 +58,11 @@ class EditorSectionRequests extends Component {
       selectedFilter: status,
     });
 
-    const token = Cookies.get('token');
-
-    if (!token) {
-      console.error("No authentication token found");
-      this.props.history.push("/login"); // Redirect to login page
-      window.location.reload();
-
-      return;
-    }
+    
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests?role=editor${status && `&req_status=${status}`}`,
-        {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        }
+        `${process.env.REACT_APP_BACKEND_URL}/requests?role=editor${status && `&req_status=${status}`}`
       );
 
       if (!response.ok) {

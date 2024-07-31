@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Redirect, withRouter } from "react-router-dom";
-import Cookies from 'js-cookie';
 import { TailSpin } from "react-loader-spinner";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import AccessibilitySection from "../AccessibilitySection";
@@ -38,43 +37,13 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    this.handleTokenFromUrl();
     this.checkAuthStatus();
   }
 
-  handleTokenFromUrl = () => {
-    const params = new URLSearchParams(this.props.location.search);
-    const token = params.get('token');
-
-    if (token) {
-      // Save token in a cookie
-      Cookies.set('token', token, { 
-        expires: 30, // Cookie expiry in days
-        path: '/',
-        secur:true,
-        // secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
-        sameSite: 'Lax' // Protect against CSRF attacks
-      });
-
-      // Redirect to home page after saving token
-      this.props.history.replace('/');
-    }
-  };
-
   checkAuthStatus = async () => {
-    const token = Cookies.get('token');
-    if (!token) {
-      this.setState({ loading: false });
-      return;
-    }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/oauth/status`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`, // Add the token to the request headers
-        },
-      });
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/oauth/status`);
       if (response.ok) {
         const data = await response.json();
         console.log(data);
