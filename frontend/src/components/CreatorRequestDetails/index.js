@@ -55,7 +55,13 @@ class CreatorRequestDetails extends Component {
       loading: true,
     });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/requests/${videoId}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/requests/${videoId}`,
+        {
+          method: "GET",
+          credentials: "include", // Include cookies with the request
+        }
+      );
 
       if (!response.ok) {
         this.setState({
@@ -107,6 +113,7 @@ class CreatorRequestDetails extends Component {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ creatorResponse: true }),
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -137,6 +144,7 @@ class CreatorRequestDetails extends Component {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ creatorResponse: false }),
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -353,10 +361,8 @@ class CreatorRequestDetails extends Component {
       <LanguageAndAccessibilityContext.Consumer>
         {(value) => {
           const { activeLanguage, fontSizeRatio: fsr, showInGray } = value;
-          const {
-            renderRequestDetailsContent,
-            renderFetchingErrorContent,
-          } = getSectionData(requestDetailsContent, activeLanguage);
+          const { renderRequestDetailsContent, renderFetchingErrorContent } =
+            getSectionData(requestDetailsContent, activeLanguage);
 
           return (
             <div className={`${showInGray && "show-in-gray"} bg-container`}>

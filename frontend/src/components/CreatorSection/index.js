@@ -45,12 +45,15 @@ class CreatorSection extends Component {
       selectedFilter: status,
     });
 
-    
-  
-
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests?role=creator${status && `&req_status=${status}`}`
+        `${process.env.REACT_APP_BACKEND_URL}/requests?role=creator${
+          status && `&req_status=${status}`
+        }`,
+        {
+          method: "GET",
+          credentials: "include", // Include cookies with the request
+        }
       );
       if (!response.ok) {
         this.setState({
@@ -91,13 +94,17 @@ class CreatorSection extends Component {
       isProcessing: true,
     });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/response/${videoId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ creatorResponse: true }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/response/${videoId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ creatorResponse: true }),
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         toast.success("Request approved successfully");
@@ -118,13 +125,17 @@ class CreatorSection extends Component {
       isProcessing: true,
     });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/response/${videoId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ creatorResponse: false }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/response/${videoId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ creatorResponse: false }),
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         toast.success("Request rejected successfully");
@@ -244,10 +255,8 @@ class CreatorSection extends Component {
           } = value;
           const fsr = fontSizeRatio;
           console.log("creator section ratio: ", fontSizeRatio);
-          const {
-            renderRequestsSectionContent,
-            renderFetchingErrorContent,
-          } = getSectionData(requestsSectionContent, activeLanguage);
+          const { renderRequestsSectionContent, renderFetchingErrorContent } =
+            getSectionData(requestsSectionContent, activeLanguage);
 
           return (
             <div className={`${showInGray && "show-in-gray"} bg-container`}>

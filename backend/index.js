@@ -15,7 +15,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const cors = require("cors");
 const FormData = require("form-data");
 const fetch = require("node-fetch");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const app = express(); // Express instance
 
@@ -28,9 +28,7 @@ app.set("trust proxy", true);
 
 app.use(
   cors({
-    origin: [
-      `${process.env.FRONTEND_URL}`,
-    ], // Allow requests from frontend running on these origins
+    origin: [`${process.env.FRONTEND_URL}`], // Allow requests from frontend running on these origins
     methods: "GET,POST,PUT,DELETE",
     credentials: true, // Allow credentials (cookies, authorization headers)
   })
@@ -96,7 +94,9 @@ passport.use(
         }
 
         const user = { email }; // Create user object for JWT payload
-        const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '30d' });
+        const token = jwt.sign(user, process.env.JWT_SECRET, {
+          expiresIn: "30d",
+        });
         return cb(null, { token }); // Pass the token instead of email
       } catch (err) {
         console.error("Error in GoogleStrategy:", err);
@@ -117,20 +117,18 @@ app.get(
 
     const token = req.user.token; // Extract token from req.user
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
-      sameSite: 'Lax', // Protect against CSRF attacks
+      secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production
+      sameSite: "Lax", // Protect against CSRF attacks
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      domain: 'jwt-proxy-frontend.onrender.com', // Set this if you need to share cookies across subdomains
-      path:'/'
+      // domain: "jwt-proxy-frontend.onrender.com", // Set this if you need to share cookies across subdomains
+      // path: "/",
     });
-    
 
     res.redirect(`${process.env.FRONTEND_URL}`); // Redirect to the frontend after setting the cookie
   }
 );
-
 
 // Google OAuth authentication route
 app.get(
@@ -194,9 +192,9 @@ initializeDBAndServer();
 
 const ensureAuthenticated = async (req, res, next) => {
   const token = req.cookies.token; // Get token from cookies
-  console.log('backend cookies: ',req.cookies)
+  console.log("backend cookies: ", req.cookies);
 
-  console.log('token from cookies:',token)
+  console.log("token from cookies:", token);
 
   if (!token) {
     return res.redirect(`${process.env.FRONTEND_URL}/login`);
@@ -220,7 +218,6 @@ const ensureAuthenticated = async (req, res, next) => {
     res.redirect(`${process.env.FRONTEND_URL}/login`);
   }
 };
-
 
 // Function to get new access token using refresh token
 const getNewAccessToken = async (refreshToken) => {
@@ -259,14 +256,14 @@ const getNewAccessToken = async (refreshToken) => {
 
 /*...................... CRUD Operations ................................. */
 
-app.get('/oauth/status',async(req,res)=>{
+app.get("/oauth/status", async (req, res) => {
   const token = req.cookies.token; // Get token from cookies
-  console.log('backend cookies: ',req.cookies)
+  console.log("backend cookies: ", req.cookies);
 
-  console.log('token from cookies:',token)
+  console.log("token from cookies:", token);
 
   if (!token) {
-    return res.send({authenticated:false })
+    return res.send({ authenticated: false });
   }
 
   try {
@@ -277,16 +274,15 @@ app.get('/oauth/status',async(req,res)=>{
 
     if (!userDetailsObj) {
       console.log("User not found");
-      return res.send({authenticated:false })
+      return res.send({ authenticated: false });
     }
 
-    res.send({authenticated:true })
+    res.send({ authenticated: true });
   } catch (err) {
     console.error("Token verification failed:", err);
-    res.send({authenticated:false })
+    res.send({ authenticated: false });
   }
-
-})
+});
 
 app.get("/user/details", ensureAuthenticated, async (req, res) => {
   try {
@@ -310,10 +306,6 @@ app.get("/user/details", ensureAuthenticated, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-
-
-
 
 // Request video upload
 app.post(
@@ -659,7 +651,7 @@ const downloadFromUrl = async (fileUrl, videoId, fileType) => {
 };
 
 // Route to upload video
-app.post("/upload-video",ensureAuthenticated, async (req, res) => {
+app.post("/upload-video", ensureAuthenticated, async (req, res) => {
   const { videoId } = req.body;
 
   console.log("video id is :", videoId);
@@ -860,4 +852,3 @@ app.post("/upload-video",ensureAuthenticated, async (req, res) => {
     res.status(500).json({ message: "Failed to upload video." });
   }
 });
-

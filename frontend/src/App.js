@@ -60,34 +60,66 @@ class App extends Component {
     }));
   };
 
+  resetSettings = () => {
+    this.setState({
+      fontSizeRatio: 1,
+      showInGray: false,
+      showUnderLines: false,
+    });
+  };
+
   render() {
-    const { activeLanguage, fontSizeRatio, showInGray, showUnderLines } = this.state;
+    const { activeLanguage, fontSizeRatio, showInGray, showUnderLines } =
+      this.state;
+
     return (
-      <LanguageAndAccessibilityContext.Provider
-        value={{
-          activeLanguage,
-          fontSizeRatio,
-          showInGray,
-          showUnderLines,
-          changeLanguage: this.changeLanguage,
-          increaseRatio: this.increaseRatio,
-          decreaseRatio: this.decreaseRatio,
-          toggleGrayScale: this.toggleGrayScale,
-          toggleUnderLines: this.toggleUnderLines,
-        }}
-      >
-        <BrowserRouter>
+      <BrowserRouter>
+        <LanguageAndAccessibilityContext.Provider
+          value={{
+            activeLanguage,
+            changeLanguage: this.changeLanguage,
+            fontSizeRatio,
+            increaseRatio: this.increaseRatio,
+            decreaseRatio: this.decreaseRatio,
+            showInGray,
+            toggleGrayScale: this.toggleGrayScale,
+            showUnderLines,
+            toggleUnderLines: this.toggleUnderLines,
+            resetSettings: this.resetSettings,
+          }}
+        >
           <Switch>
-            <Route exact path="/login" component={Login} />
             <ProtectedRoute exact path="/" component={Home} />
-            <ProtectedRoute exact path="/requests" component={RequestSection} />
-            <ProtectedRoute exact path="/editor" component={EditorSection} />
-            <ProtectedRoute exact path="/creator" component={CreatorSection} />
-            <ProtectedRoute exact path="/request/:id" component={CreatorRequestDetails} />
-            <ProtectedRoute exact path="/request/:id/editor" component={EditorRequestDetails} />
+            <Route exact path="/login" component={Login} />
+            <ProtectedRoute
+              exact
+              path="/creator_section"
+              component={CreatorSection}
+            />
+            <ProtectedRoute
+              exact
+              path="/editor_section"
+              component={EditorSection}
+            />
+            <ProtectedRoute
+              exact
+              path="/creator_section/:videoId"
+              component={CreatorRequestDetails}
+            />
+
+            <ProtectedRoute
+              exact
+              path="/request_section"
+              component={RequestSection}
+            />
+            <ProtectedRoute
+              exact
+              path="/editor_section/:videoId"
+              component={EditorRequestDetails}
+            />
           </Switch>
-        </BrowserRouter>
-      </LanguageAndAccessibilityContext.Provider>
+        </LanguageAndAccessibilityContext.Provider>
+      </BrowserRouter>
     );
   }
 }

@@ -70,7 +70,13 @@ class EditorRequestDetails extends Component {
       loading: true,
     });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/requests/${videoId}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/requests/${videoId}`,
+        {
+          method: "GET",
+          credentials: "include", // Include cookies with the request
+        }
+      );
       if (!response.ok) {
         this.setState({
           loading: false,
@@ -117,12 +123,16 @@ class EditorRequestDetails extends Component {
       isProcessing: true,
     });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete/${videoId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/delete/${videoId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         toast.success("Deleted Successfully");
         setTimeout(() => {
@@ -162,13 +172,17 @@ class EditorRequestDetails extends Component {
       uploadResponse: "IN_PROGRESS",
     });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/upload-video`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Set the correct Content-Type header
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/upload-video`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Set the correct Content-Type header
+          },
+          body: JSON.stringify(requestBody),
+          credentials: "include",
+        }
+      );
 
       const responseData = await response.json();
       console.log("upload response data: ", responseData);
@@ -239,7 +253,13 @@ class EditorRequestDetails extends Component {
     this.setState({ isProcessing: true });
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/resend/${videoId}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/resend/${videoId}`,
+        {
+          method: "GET",
+          credentials: "include", // Include cookies with the request
+        }
+      );
       if (response.ok) {
         alert("Resent successfully");
         window.location.reload();
@@ -297,11 +317,8 @@ class EditorRequestDetails extends Component {
   };
 
   renderUploadResponse = (renderUploadResponseContent) => {
-    const {
-      uploadResponse,
-      uploadResponseMessage,
-      uploadResponseImg,
-    } = this.state;
+    const { uploadResponse, uploadResponseMessage, uploadResponseImg } =
+      this.state;
     const { inProgressMessage, goBack } = renderUploadResponseContent;
 
     return (

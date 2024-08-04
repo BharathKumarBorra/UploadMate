@@ -150,10 +150,14 @@ class RequestSection extends Component {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/upload-request`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/upload-request`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         this.setState({
@@ -293,12 +297,8 @@ class RequestSection extends Component {
 
   renderSubmitMessage = (renderSubmitMessageContent, fsr) => {
     const { responseStatus } = this.state;
-    const {
-      successMessage,
-      clientErrorMessage,
-      serverErrorMessage,
-      goBack,
-    } = renderSubmitMessageContent;
+    const { successMessage, clientErrorMessage, serverErrorMessage, goBack } =
+      renderSubmitMessageContent;
     return (
       <SubmitResponseSection>
         <SubmitResponseImage

@@ -59,39 +59,31 @@ class Header extends Component {
     this.getUserDetails();
   }
 
+  getUserDetails = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/user/details`,
+        {
+          method: "GET",
+          credentials: "include", // Include cookies with the request
+        }
+      );
 
-
-getUserDetails = async () => {
-
- 
-
-  try {
-    
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/user/details`,
-      {
-        method: "GET",
-        credentials: "include", // Include cookies with the request
+      if (response.ok) {
+        const finalData = await response.json();
+        console.log("final Data: ", finalData);
+        this.setState({
+          userImage: finalData.userImage,
+          userName: finalData.displayName,
+          invitationCode: finalData.invitationCode,
+        });
+      } else {
+        console.error("Failed to fetch user details:", response.statusText);
       }
-      
-    );
-
-    if (response.ok) {
-      const finalData = await response.json();
-      console.log("final Data: ", finalData);
-      this.setState({
-        userImage: finalData.userImage,
-        userName: finalData.displayName,
-        invitationCode: finalData.invitationCode,
-      });
-    } else {
-      console.error("Failed to fetch user details:", response.statusText);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
     }
-  } catch (error) {
-    console.error("Error fetching user details:", error);
-  }
-};
-
+  };
 
   onToggleLanguageContainer = () => {
     const { showLanguageContainer } = this.state;
@@ -131,13 +123,10 @@ getUserDetails = async () => {
     });
   };
 
-  onLogout =  () => {
+  onLogout = () => {
     // Remove JWT token from cookies
     // Cookies.remove('token');
-
     // this.props.history.replace('/login');
-
-     
   };
 
   copyToClipboard = () => {
@@ -184,14 +173,8 @@ getUserDetails = async () => {
             showUnderLines: sUl,
           } = value;
           console.log("showUnderLines:", sUl);
-          const {
-            request,
-            home,
-            creator,
-            editor,
-            logout,
-            invCode,
-          } = getSectionData(headerSectionContent, activeLanguage);
+          const { request, home, creator, editor, logout, invCode } =
+            getSectionData(headerSectionContent, activeLanguage);
           const selectedLanguage = languagesList.filter(
             (eachItem) => eachItem.code === activeLanguage
           )[0].language;

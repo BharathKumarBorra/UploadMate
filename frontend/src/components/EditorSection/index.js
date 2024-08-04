@@ -58,11 +58,15 @@ class EditorSectionRequests extends Component {
       selectedFilter: status,
     });
 
-    
-
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests?role=editor${status && `&req_status=${status}`}`
+        `${process.env.REACT_APP_BACKEND_URL}/requests?role=editor${
+          status && `&req_status=${status}`
+        }`,
+        {
+          method: "GET",
+          credentials: "include", // Include cookies with the request
+        }
       );
 
       if (!response.ok) {
@@ -113,6 +117,7 @@ class EditorSectionRequests extends Component {
         headers: {
           "Content-type": "application/json",
         },
+        credentials: "include",
       });
       if (response.ok) {
         toast.success("Deleted Successfully");
@@ -153,6 +158,7 @@ class EditorSectionRequests extends Component {
           "Content-Type": "application/json", // Set the correct Content-Type header
         },
         body: JSON.stringify(requestBody),
+        credentials: "include",
       });
 
       const responseData = await response.json();
@@ -226,7 +232,10 @@ class EditorSectionRequests extends Component {
     });
 
     try {
-      const response = await fetch(`/resend/${videoId}`);
+      const response = await fetch(`/resend/${videoId}`, {
+        method: "GET",
+        credentials: "include", // Include cookies with the request
+      });
       if (response.ok) {
         toast.success("Resent Successfully");
         await this.getRequests();
@@ -282,11 +291,8 @@ class EditorSectionRequests extends Component {
   };
 
   renderUploadResponse = (renderUploadResponseContent) => {
-    const {
-      uploadResponse,
-      uploadResponseMessage,
-      uploadResponseImg,
-    } = this.state;
+    const { uploadResponse, uploadResponseMessage, uploadResponseImg } =
+      this.state;
     const { inProgressMessage, goBack } = renderUploadResponseContent;
     return (
       <UploadResponseSection>
