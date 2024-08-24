@@ -26,7 +26,7 @@ class ProtectedRoute extends Component {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log(" data : ", data);
         this.setState({
           isAuthenticated: data.authenticated,
           loading: false,
