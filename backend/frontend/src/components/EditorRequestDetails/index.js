@@ -71,7 +71,7 @@ class EditorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests/${videoId}`,
+        `https://youtube-jwt-proxy.onrender.com/requests/${videoId}`,
         {
           method: "GET",
           credentials: "include", // Include cookies with the request
@@ -124,7 +124,7 @@ class EditorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/delete/${videoId}`,
+        `https://youtube-jwt-proxy.onrender.com/delete/${videoId}`,
         {
           method: "DELETE",
           headers: {
@@ -173,7 +173,7 @@ class EditorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/upload-video`,
+        `https://youtube-jwt-proxy.onrender.com/upload-video`,
         {
           method: "POST",
           headers: {
@@ -254,7 +254,7 @@ class EditorRequestDetails extends Component {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/resend/${videoId}`,
+        `https://youtube-jwt-proxy.onrender.com/resend/${videoId}`,
         {
           method: "GET",
           credentials: "include", // Include cookies with the request

@@ -41,9 +41,9 @@ class Login extends Component {
   }
 
   checkAuthStatus = async () => {
-
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/oauth/status`,
+      const response = await fetch(
+        "https://youtube-jwt-proxy.onrender.com/oauth/status",
         {
           method: "GET",
           credentials: "include", // Include cookies with the request
@@ -92,12 +92,8 @@ class Login extends Component {
 
   renderLoginSection = (activeLanguage, fsr, sUl) => {
     const { showMenuContainer } = this.state;
-    const {
-      upperDescription,
-      mainDescription,
-      lowerDescription,
-      headerItems,
-    } = getSectionData(loginSectionContent, activeLanguage);
+    const { upperDescription, mainDescription, lowerDescription, headerItems } =
+      getSectionData(loginSectionContent, activeLanguage);
     const { about, contact, signIn } = headerItems;
     return (
       <>
@@ -115,7 +111,10 @@ class Login extends Component {
               {contact}
             </HeaderItem>
             <HeaderItem ratio={fsr}>
-              <AnchorTag href={`${process.env.REACT_APP_BACKEND_URL}/oauth/google`} sUl={sUl}>
+              <AnchorTag
+                href={`${process.env.REACT_APP_BACKEND_URL}/oauth/google`}
+                sUl={sUl}
+              >
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
                   <SignInUserImg />
                   {signIn}
@@ -146,7 +145,9 @@ class Login extends Component {
             <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
             <LowerDescription ratio={fsr}>{lowerDescription}</LowerDescription>
 
-            <StyledAnchorTag href={`${process.env.REACT_APP_BACKEND_URL}/oauth/google`}>
+            <StyledAnchorTag
+              href={`${process.env.REACT_APP_BACKEND_URL}/oauth/google`}
+            >
               <GetStartedButton ratio={fsr}>
                 Get Started <StyledArrow />
               </GetStartedButton>

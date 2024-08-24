@@ -62,7 +62,7 @@ class Header extends Component {
   getUserDetails = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/user/details`,
+        "https://youtube-jwt-proxy.onrender.com/user/details",
         {
           method: "GET",
           credentials: "include", // Include cookies with the request

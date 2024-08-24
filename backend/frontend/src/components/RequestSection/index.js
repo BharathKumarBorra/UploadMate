@@ -151,7 +151,7 @@ class RequestSection extends Component {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/upload-request`,
+        "https://youtube-jwt-proxy.onrender.com/upload-request",
         {
           method: "POST",
           body: formData,

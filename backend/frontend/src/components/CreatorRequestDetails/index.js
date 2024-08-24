@@ -56,7 +56,7 @@ class CreatorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests/${videoId}`,
+        `https://youtube-jwt-proxy.onrender.com/requests/${videoId}`,
         {
           method: "GET",
           credentials: "include", // Include cookies with the request
@@ -107,14 +107,17 @@ class CreatorRequestDetails extends Component {
       isProcessing: true,
     });
     try {
-      const response = await fetch(`/response/${videoId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ creatorResponse: true }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ creatorResponse: true }),
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         await this.getRequestDetails(videoId);
@@ -138,14 +141,17 @@ class CreatorRequestDetails extends Component {
     });
 
     try {
-      const response = await fetch(`/response/${videoId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ creatorResponse: false }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ creatorResponse: false }),
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         await this.getRequestDetails(videoId);

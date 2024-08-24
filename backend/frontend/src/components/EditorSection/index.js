@@ -60,7 +60,7 @@ class EditorSectionRequests extends Component {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests?role=editor${
+        `https://youtube-jwt-proxy.onrender.com/requests?role=editor${
           status && `&req_status=${status}`
         }`,
         {
@@ -112,13 +112,16 @@ class EditorSectionRequests extends Component {
       isProcessing: true,
     });
     try {
-      const response = await fetch(`/delete/${videoId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://youtube-jwt-proxy.onrender.com/delete/${videoId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         toast.success("Deleted Successfully");
         await this.getRequests();
@@ -152,14 +155,17 @@ class EditorSectionRequests extends Component {
       uploadResponse: "IN_PROGRESS",
     });
     try {
-      const response = await fetch("/upload-video", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Set the correct Content-Type header
-        },
-        body: JSON.stringify(requestBody),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://youtube-jwt-proxy.onrender.com/upload-video",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Set the correct Content-Type header
+          },
+          body: JSON.stringify(requestBody),
+          credentials: "include",
+        }
+      );
 
       const responseData = await response.json();
       console.log("upload response data: ", responseData);
@@ -232,10 +238,13 @@ class EditorSectionRequests extends Component {
     });
 
     try {
-      const response = await fetch(`/resend/${videoId}`, {
-        method: "GET",
-        credentials: "include", // Include cookies with the request
-      });
+      const response = await fetch(
+        `https://youtube-jwt-proxy.onrender.com/resend/${videoId}`,
+        {
+          method: "GET",
+          credentials: "include", // Include cookies with the request
+        }
+      );
       if (response.ok) {
         toast.success("Resent Successfully");
         await this.getRequests();

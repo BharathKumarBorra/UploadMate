@@ -47,7 +47,7 @@ class CreatorSection extends Component {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/requests?role=creator${
+        `https://youtube-jwt-proxy.onrender.com/requests?role=creator${
           status && `&req_status=${status}`
         }`,
         {
@@ -95,7 +95,7 @@ class CreatorSection extends Component {
     });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/response/${videoId}`,
+        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
         {
           method: "PUT",
           headers: {
@@ -126,7 +126,7 @@ class CreatorSection extends Component {
     });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/response/${videoId}`,
+        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
         {
           method: "PUT",
           headers: {
