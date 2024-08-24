@@ -112,7 +112,7 @@ class Login extends Component {
             </HeaderItem>
             <HeaderItem ratio={fsr}>
               <AnchorTag
-                href={`https://youtube-jwt-proxy.onrender.com/oauth/google`}
+                href="https://youtube-jwt-proxy.onrender.com/oauth/google"
                 sUl={sUl}
               >
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
@@ -126,9 +126,7 @@ class Login extends Component {
 
               <MenuContainer show={showMenuContainer} ratio={fsr}>
                 <MenuItem className="menu-item menu-sign-in-item">
-                  <a
-                    href={`https://youtube-jwt-proxy.onrender.com/oauth/google`}
-                  >
+                  <a href="https://youtube-jwt-proxy.onrender.com/oauth/google">
                     <SignInButton className="sign-in-button">
                       {signIn}
                     </SignInButton>
