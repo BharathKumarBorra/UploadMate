@@ -30,7 +30,7 @@ app.use(
   cors({
     origin: [`${process.env.FRONTEND_URL}`], // Allow requests from frontend running on these origins
     methods: "GET,POST,PUT,DELETE",
-    credentials: true, // Allow cookies and other credentials
+    credentials: true, // Allow credentials (cookies, authorization headers)
   })
 );
 
@@ -106,6 +106,30 @@ passport.use(
   )
 );
 
+// Redirect route after successful authentication
+app.get(
+  "/oauth/redirect",
+  passport.authenticate("google", { session: false }),
+  async (req, res) => {
+    if (!req.user || !req.user.token) {
+      return res.redirect(`${process.env.FRONTEND_URL}`);
+    }
+
+    const token = req.user.token; // Extract token from req.user
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production
+      sameSite: "Lax", // Protect against CSRF attacks
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      // domain: "jwt-proxy-frontend.onrender.com", // Set this if you need to share cookies across subdomains
+      // path: "/",
+    });
+
+    res.redirect(`${process.env.FRONTEND_URL}`); // Redirect to the frontend after setting the cookie
+  }
+);
+
 // Google OAuth authentication route
 app.get(
   "/oauth/google",
@@ -121,28 +145,6 @@ app.get(
     accessType: "offline", // Ensure 'accessType' is set to 'offline' for refresh tokens
     prompt: "consent select_account", // Add prompt to force account selection and consent
   })
-);
-
-// Redirect route after successful authentication
-app.get(
-  "/oauth/redirect",
-  passport.authenticate("google", { session: false }),
-  async (req, res) => {
-    if (!req.user || !req.user.token) {
-      return res.redirect(`${process.env.FRONTEND_URL}/login`);
-    }
-
-    const token = req.user.token; // Extract token from req.user
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production
-      sameSite: "Lax", // Protect against CSRF attacks
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
-
-    res.redirect(`${process.env.FRONTEND_URL}`); // Redirect to the frontend after setting the cookie
-  }
 );
 
 // Configuring Cloudinary for file uploads
@@ -189,24 +191,31 @@ const initializeDBAndServer = async () => {
 initializeDBAndServer();
 
 const ensureAuthenticated = async (req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.cookies.token; // Get token from cookies
+  console.log("backend cookies: ", req.cookies);
+
+  console.log("token from cookies:", token);
 
   if (!token) {
-    return res.status(403).json({ error: "Unauthorized access" });
+    return res.redirect(`${process.env.FRONTEND_URL}/login`);
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.email = decoded.email; // Attach email to the request
+    const { email } = decoded;
+    const getUserDetailsQuery = `SELECT * FROM users WHERE email = ?;`;
+    const userDetailsObj = await mdb.get(getUserDetailsQuery, [email]);
+
+    if (!userDetailsObj) {
+      console.log("User not found");
+      return res.redirect(`${process.env.FRONTEND_URL}/login`);
+    }
+
+    req.user = userDetailsObj; // Attach user information to request
     next();
   } catch (err) {
-    if (err.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({ error: "Session expired, please log in again" });
-    } else {
-      return res.status(403).json({ error: "Invalid token" });
-    }
+    console.error("Token verification failed:", err);
+    res.redirect(`${process.env.FRONTEND_URL}/login`);
   }
 };
 
@@ -275,22 +284,11 @@ app.get("/oauth/status", async (req, res) => {
   }
 });
 
-app.get("/user/details", async (req, res) => {
+app.get("/user/details", ensureAuthenticated, async (req, res) => {
   try {
-    const token = req.cookies.token; // Get token from cookies
-    console.log("backend cookies: ", req.cookies);
-
-    console.log("token from cookies:", token);
-
-    if (!token) {
-      res.redirect(`${process.env.FRONTEND_URL}/login`);
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const { email } = decoded;
-
+    console.log("User email:", req.user.email);
     const query = `SELECT email, invitation_code, user_image, user_display_name FROM users WHERE email=?;`;
-    const dbResponse = await mdb.get(query, email);
+    const dbResponse = await mdb.get(query, req.user.email);
     console.log("dbResponse:", dbResponse);
 
     if (dbResponse) {
