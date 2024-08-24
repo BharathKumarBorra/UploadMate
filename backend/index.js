@@ -19,6 +19,14 @@ const jwt = require("jsonwebtoken");
 
 const app = express(); // Express instance
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// Catch-all handler to send the React app's index.html file for any unknown routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+});
+
 app.use(cookieParser()); // Middleware to parse cookies
 
 app.use(express.json()); // Middleware to parse JSON payloads
@@ -112,7 +120,7 @@ app.get(
   passport.authenticate("google", { session: false }),
   async (req, res) => {
     if (!req.user || !req.user.token) {
-      return res.redirect(`${process.env.FRONTEND_URL}`);
+      return res.redirect(`${process.env.FRONTEND_URL}/login`);
     }
 
     const token = req.user.token; // Extract token from req.user
