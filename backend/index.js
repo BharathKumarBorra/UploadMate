@@ -8,7 +8,7 @@ const { v2 } = require("cloudinary");
 const fs = require("fs");
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
-require("dotenv").config(); // Loading environment variables
+require("dotenv").config();
 const ejs = require("ejs");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -17,7 +17,7 @@ const FormData = require("form-data");
 const fetch = require("node-fetch");
 const jwt = require("jsonwebtoken");
 
-const app = express(); // Express instance
+const app = express();
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../frontend/build")));
@@ -34,15 +34,16 @@ app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-enc
 
 app.set("trust proxy", true);
 
+// CORS configuration (if needed)
 app.use(
   cors({
-    origin: [`${process.env.FRONTEND_URL}`], // Allow requests from frontend running on these origins
+    origin: [`${process.env.FRONTEND_URL}`],
     methods: "GET,POST,PUT,DELETE",
-    credentials: true, // Allow credentials (cookies, authorization headers)
+    credentials: true,
   })
 );
 
-// Initialize Passport and session handling
+// Initialize Passport
 app.use(passport.initialize());
 
 // Configuring Google OAuth 2.0 Strategy for Passport
@@ -64,19 +65,15 @@ passport.use(
       prompt: "consent select_account",
     },
     async (accessToken, refreshToken, profile, cb) => {
-      console.log("userAccessToken:", accessToken);
-      console.log("userRefreshToken:", refreshToken);
       try {
         const email = profile.emails[0].value;
         const userImage = profile.photos[0].value;
         const userDisplayName = profile.displayName;
 
-        // Checking if user already exists in database
         const userCheckQuery = `SELECT * FROM users WHERE email=?;`;
         const userResponse = await mdb.get(userCheckQuery, email);
 
         if (!userResponse) {
-          // Creating new user entry if user doesn't exist
           const maxIdQuery = `SELECT max(id) as maximum_id FROM users;`;
           const maxIdResponse = await mdb.get(maxIdQuery);
           const userName = `${profile.name.givenName}${
@@ -93,21 +90,17 @@ passport.use(
             userImage,
             userDisplayName,
           ]);
-          console.log(`New user created: ${userName}`);
         } else {
-          // Update user's refresh token if user already exists
           const updateRefreshTokenQuery = `UPDATE users SET refresh_token = ? WHERE email = ?`;
           await mdb.run(updateRefreshTokenQuery, [refreshToken, email]);
-          console.log(`User updated: ${userResponse.username}`);
         }
 
-        const user = { email }; // Create user object for JWT payload
+        const user = { email };
         const token = jwt.sign(user, process.env.JWT_SECRET, {
           expiresIn: "30d",
         });
-        return cb(null, { token }); // Pass the token instead of email
+        return cb(null, { token });
       } catch (err) {
-        console.error("Error in GoogleStrategy:", err);
         cb(err, null);
       }
     }
@@ -118,23 +111,21 @@ passport.use(
 app.get(
   "/oauth/redirect",
   passport.authenticate("google", { session: false }),
-  async (req, res) => {
+  (req, res) => {
     if (!req.user || !req.user.token) {
       return res.redirect(`${process.env.FRONTEND_URL}/login`);
     }
 
-    const token = req.user.token; // Extract token from req.user
+    const token = req.user.token;
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production
-      sameSite: "Lax", // Protect against CSRF attacks
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      // domain: "jwt-proxy-frontend.onrender.com", // Set this if you need to share cookies across subdomains
-      // path: "/",
     });
 
-    res.redirect(`${process.env.FRONTEND_URL}`); // Redirect to the frontend after setting the cookie
+    res.redirect(`${process.env.FRONTEND_URL}`);
   }
 );
 
@@ -150,8 +141,8 @@ app.get(
       "https://www.googleapis.com/auth/youtube",
       "https://www.googleapis.com/auth/youtube.force-ssl",
     ],
-    accessType: "offline", // Ensure 'accessType' is set to 'offline' for refresh tokens
-    prompt: "consent select_account", // Add prompt to force account selection and consent
+    accessType: "offline",
+    prompt: "consent select_account",
   })
 );
 
