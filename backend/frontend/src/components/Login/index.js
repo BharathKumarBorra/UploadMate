@@ -70,6 +70,14 @@ class Login extends Component {
     }
   };
 
+  onAuthenticate = async () => {
+    await fetch("https://youtube-jwt-proxy.onrender.com/oauth/status", {
+      method: "GET",
+      credentials: "include", // Include cookies with the request
+    });
+    this.checkAuthStatus();
+  };
+
   onToggleMenuContainer = () => {
     this.setState((prevState) => ({
       showMenuContainer: !prevState.showMenuContainer,
@@ -114,6 +122,7 @@ class Login extends Component {
               <AnchorTag
                 href="https://youtube-jwt-proxy.onrender.com/oauth/google"
                 sUl={sUl}
+                onClick={this.onAuthenticate}
               >
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
                   <SignInUserImg />
