@@ -50,7 +50,7 @@ export const MainDescription = styled.h1`
   max-width: 1100px;
   font-weight: 900;
   font-size: ${(props) => {
-    return props.ratio * 7.5;
+    return props.ratio * 8;
   }}vw;
 
   line-height: 1.2;

@@ -28,7 +28,6 @@ export const HeaderContainer = styled.header`
 `;
 
 export const ProxyLogo = styled.img`
-
   height: 45px;
   cursor: pointer;
 `;
@@ -306,6 +305,7 @@ export const LanguageContainer = styled.ul`
   height: 270px;
   overflow-y: auto;
   position: absolute;
+  top: 55px;
   font-size: ${(props) => {
     return props.ratio * 14;
   }}px;
