@@ -5,7 +5,6 @@ import AccessibilitySection from "../AccessibilitySection";
 import Header from "../Header";
 import {
   HomeContainer,
-  HomeImage,
   UpperDescription,
   MainDescription,
   LowerDescription,
@@ -23,11 +22,8 @@ const Home = () => {
         const { activeLanguage, fontSizeRatio, showInGray } = value;
         const fsr = fontSizeRatio;
         console.log("home section Ratio: ", fontSizeRatio);
-        const {
-          upperDescription,
-          mainDescription,
-          lowerDescription,
-        } = getSectionData(homeSectionContent, activeLanguage);
+        const { upperDescription, mainDescription, lowerDescription } =
+          getSectionData(homeSectionContent, activeLanguage);
 
         return (
           <div className={`${showInGray && "show-in-gray"} bg-container`}>
@@ -40,10 +36,7 @@ const Home = () => {
                 </UpperDescription>
 
                 <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
-                <HomeImage
-                  alt="home-img"
-                  src="https://res.cloudinary.com/drbnxuf21/image/upload/v1724610347/imockuiw4cm8f8ygrehw.jpg"
-                />
+
                 <LowerDescription ratio={fsr}>
                   {lowerDescription}
                 </LowerDescription>
