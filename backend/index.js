@@ -26,14 +26,14 @@ app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-enc
 
 // app.set("trust proxy", true);
 
-// CORS configuration (if needed)
-// app.use(
-//   cors({
-//     origin: [`${process.env.FRONTEND_URL}`],
-//     methods: "GET,POST,PUT,DELETE",
-//     credentials: true,
-//   })
-// );
+//cors configuration
+app.use(
+  cors({
+    origin: [`${process.env.FRONTEND_URL}`],
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 // Initialize Passport
 app.use(passport.initialize());
@@ -111,9 +111,8 @@ app.get(
     const token = req.user.token;
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "None",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
@@ -137,14 +136,6 @@ app.get(
     prompt: "consent select_account",
   })
 );
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "frontend/build")));
-
-// Catch-all handler to send the React app's index.html file for any unknown routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/build/index.html"));
-});
 
 // Configuring Cloudinary for file uploads
 v2.config({
@@ -850,4 +841,12 @@ app.post("/upload-video", ensureAuthenticated, async (req, res) => {
     cleanupFiles(videoFileName, thumbnailFileName);
     res.status(500).json({ message: "Failed to upload video." });
   }
+});
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "frontend/build")));
+
+// Catch-all handler to send the React app's index.html file for any unknown routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend/build/index.html"));
 });
