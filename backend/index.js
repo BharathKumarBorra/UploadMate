@@ -9,7 +9,7 @@ const fs = require("fs");
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
-const ejs = require("ejs");
+// const ejs = require("ejs");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const cors = require("cors");
@@ -19,29 +19,21 @@ const jwt = require("jsonwebtoken");
 
 const app = express();
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "frontend/build")));
-
-// Catch-all handler to send the React app's index.html file for any unknown routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/build/index.html"));
-});
-
 app.use(cookieParser()); // Middleware to parse cookies
 
 app.use(express.json()); // Middleware to parse JSON payloads
 app.use(express.urlencoded({ extended: false })); // Middleware to parse URL-encoded payloads
 
-app.set("trust proxy", true);
+// app.set("trust proxy", true);
 
 // CORS configuration (if needed)
-app.use(
-  cors({
-    origin: [`${process.env.FRONTEND_URL}`],
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [`${process.env.FRONTEND_URL}`],
+//     methods: "GET,POST,PUT,DELETE",
+//     credentials: true,
+//   })
+// );
 
 // Initialize Passport
 app.use(passport.initialize());
@@ -145,6 +137,14 @@ app.get(
     prompt: "consent select_account",
   })
 );
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "frontend/build")));
+
+// Catch-all handler to send the React app's index.html file for any unknown routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend/build/index.html"));
+});
 
 // Configuring Cloudinary for file uploads
 v2.config({
