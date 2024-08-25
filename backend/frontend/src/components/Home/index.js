@@ -5,6 +5,7 @@ import AccessibilitySection from "../AccessibilitySection";
 import Header from "../Header";
 import {
   HomeContainer,
+  HomeImage,
   UpperDescription,
   MainDescription,
   LowerDescription,
@@ -39,7 +40,10 @@ const Home = () => {
                 </UpperDescription>
 
                 <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
-
+                <HomeImage
+                  alt="home-img"
+                  src="https://res.cloudinary.com/drbnxuf21/image/upload/v1724610347/imockuiw4cm8f8ygrehw.jpg"
+                />
                 <LowerDescription ratio={fsr}>
                   {lowerDescription}
                 </LowerDescription>
