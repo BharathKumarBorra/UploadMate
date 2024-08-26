@@ -3,14 +3,17 @@ import "react-toastify/dist/ReactToastify.css";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import AccessibilitySection from "../AccessibilitySection";
 import Header from "../Header";
+import Footer from "../Footer";
 import {
   HomeContainer,
+  ContentWrapper,
   UpperDescription,
   MainDescription,
   LowerDescription,
   StyledLink,
   GetStartedButton,
   StyledArrow,
+  FooterWrapper,
 } from "./styledComponents";
 import { homeSectionContent } from "./languageContent";
 import { getSectionData } from "../Header/languageContent";
@@ -31,20 +34,29 @@ const Home = () => {
               <Header ratio={fsr} />
 
               <HomeContainer>
-                <UpperDescription ratio={fsr}>
-                  {upperDescription}
-                </UpperDescription>
+                <ContentWrapper>
+                  <UpperDescription ratio={fsr}>
+                    {upperDescription}
+                  </UpperDescription>
 
-                <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
+                  <MainDescription ratio={fsr}>
+                    {mainDescription}
+                  </MainDescription>
 
-                <LowerDescription ratio={fsr}>
-                  {lowerDescription}
-                </LowerDescription>
-                <StyledLink to="/request_section">
-                  <GetStartedButton ratio={fsr}>
-                    Get Started <StyledArrow />
-                  </GetStartedButton>
-                </StyledLink>
+                  <LowerDescription ratio={fsr}>
+                    {lowerDescription}
+                  </LowerDescription>
+
+                  <StyledLink to="/request_section">
+                    <GetStartedButton ratio={fsr}>
+                      Get Started <StyledArrow />
+                    </GetStartedButton>
+                  </StyledLink>
+                </ContentWrapper>
+
+                <FooterWrapper>
+                  <Footer />
+                </FooterWrapper>
               </HomeContainer>
             </div>
             <AccessibilitySection />

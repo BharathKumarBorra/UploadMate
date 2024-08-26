@@ -7,6 +7,8 @@ import CreatorRequestDetails from "./components/CreatorRequestDetails";
 import EditorRequestDetails from "./components/EditorRequestDetails";
 import RequestSection from "./components/RequestSection";
 import Login from "./components/Login";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsOfService from "./components/TermsOfService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LanguageAndAccessibilityContext from "./context/languageAndAccessibilityContext";
 import { toast } from "react-toastify";
@@ -117,6 +119,8 @@ class App extends Component {
               path="/editor_section/:videoId"
               component={EditorRequestDetails}
             />
+            <Route exact path="/privacy_policy" component={PrivacyPolicy} />
+            <Route exact path="/terms_of_service" component={TermsOfService} />
           </Switch>
         </LanguageAndAccessibilityContext.Provider>
       </BrowserRouter>

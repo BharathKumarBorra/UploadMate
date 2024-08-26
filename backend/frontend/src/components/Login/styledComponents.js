@@ -15,6 +15,32 @@ const fadeInUp = keyframes`
   }
 `;
 
+export const LoginContainer = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  @media screen and (min-width: 768px) {
+    padding-top: 76px;
+  }
+`;
+
+export const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1; /* Take up remaining space to center content */
+  padding: calc(min(20vw, 20vh) - 60px) 5vw;
+  @media screen and (min-width: 1024px) {
+    min-height: calc(100vh - 76px);
+    padding: calc(5vw - 76px);
+  }
+`;
+
 export const HeaderContainer = styled.header`
   max-width: 1920px;
   margin: auto;
@@ -209,18 +235,13 @@ export const SignInUserImg = styled(PiUserCircleLight)`
 
 //login main container styling
 
-export const LoginContainer = styled.div`
+export const LoginMainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 7vw 12px;
+  min-height: calc(100vh - 60px);
 
-  @media screen and (min-width: 576px) {
-    padding-top: 10vw;
-  }
-  @media screen and (min-width: 992px) {
-    padding-top: 6vw;
+  @media screen and (min-height: 768px) {
+    min-height: calc(100vh - 76px);
   }
 `;
 
@@ -349,4 +370,9 @@ export const GetStartedButton = styled.button`
   &:hover ${StyledArrow} {
     transform: translateX(8px);
   }
+`;
+
+export const FooterWrapper = styled.div`
+  align-self: stretch;
+  margin-top: auto;
 `;

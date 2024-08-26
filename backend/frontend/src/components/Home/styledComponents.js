@@ -18,13 +18,23 @@ export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-
-  padding: 20px 5vw;
 
   @media screen and (min-width: 992px) {
     min-height: calc(100vh - 76px);
+  }
+`;
+
+export const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* Take up remaining space to center content */
+  padding: min(20vw, 20vh) 5vw;
+  @media screen and (min-width: 1024px) {
+    min-height: calc(100vh - 76px);
+    padding: 5vw;
   }
 `;
 
@@ -153,4 +163,9 @@ export const GetStartedButton = styled.button`
   &:hover ${StyledArrow} {
     transform: translateX(8px);
   }
+`;
+
+export const FooterWrapper = styled.div`
+  align-self: stretch;
+  margin-top: auto;
 `;

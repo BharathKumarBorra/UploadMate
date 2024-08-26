@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Redirect, withRouter } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
+import Footer from "../Footer";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import AccessibilitySection from "../AccessibilitySection";
 import {
+  LoginContainer,
   HeaderContainer,
   ProxyLogo,
   HeaderList,
@@ -15,13 +17,15 @@ import {
   AnchorTag,
   SignInButton,
   SignInUserImg,
-  LoginContainer,
+  LoginMainContainer,
   UpperDescription,
   MainDescription,
   LowerDescription,
   StyledAnchorTag,
   StyledArrow,
   GetStartedButton,
+  ContentWrapper,
+  FooterWrapper,
 } from "./styledComponents";
 import { loginSectionContent } from "./languageContent";
 import { getSectionData } from "../Header/languageContent";
@@ -90,7 +94,7 @@ class Login extends Component {
       getSectionData(loginSectionContent, activeLanguage);
     const { about, contact, signIn } = headerItems;
     return (
-      <>
+      <LoginContainer>
         <HeaderContainer>
           <ProxyLogo
             alt="proxy-logo"
@@ -133,8 +137,9 @@ class Login extends Component {
             </HeaderItem>
           </HeaderList>
         </HeaderContainer>
-        <div className="main-container">
-          <LoginContainer>
+
+        <LoginMainContainer>
+          <ContentWrapper>
             <UpperDescription ratio={fsr}>{upperDescription}</UpperDescription>
             <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
             <LowerDescription ratio={fsr}>{lowerDescription}</LowerDescription>
@@ -146,9 +151,12 @@ class Login extends Component {
                 Get Started <StyledArrow />
               </GetStartedButton>
             </StyledAnchorTag>
-          </LoginContainer>
-        </div>
-      </>
+          </ContentWrapper>
+          <FooterWrapper>
+            <Footer />
+          </FooterWrapper>
+        </LoginMainContainer>
+      </LoginContainer>
     );
   };
 
