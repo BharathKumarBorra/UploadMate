@@ -90,7 +90,10 @@ class Login extends Component {
 
           <HeaderList className="header-list">
             <HeaderItem ratio={fsr}>
-              <AnchorTag href="http://localhost:5000/oauth/google" sUl={sUl}>
+              <AnchorTag
+                href="https://youtube-jwt-proxy.onrender.com/google"
+                sUl={sUl}
+              >
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
                   <SignInUserImg />
                   {signIn}
@@ -106,7 +109,7 @@ class Login extends Component {
             <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
             <LowerDescription ratio={fsr}>{lowerDescription}</LowerDescription>
 
-            <StyledAnchorTag href="http://localhost:5000/oauth/google">
+            <StyledAnchorTag href="https://youtube-jwt-proxy.onrender.com/oauth/google">
               <GetStartedButton ratio={fsr}>
                 Get Started <StyledArrow />
               </GetStartedButton>
