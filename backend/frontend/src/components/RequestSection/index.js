@@ -148,7 +148,7 @@ class RequestSection extends Component {
     if (invitationCode) {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/check_invitation_code`,
+          `https://youtube-jwt-proxy.onrender.com/check_invitation_code`,
           {
             method: "POST",
             credentials: "include",
