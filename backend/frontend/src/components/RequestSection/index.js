@@ -191,7 +191,7 @@ class RequestSection extends Component {
       responseStatus: "IN_PROGRESS",
     });
 
-    const form = event.currentTarget;
+    const form = event.target;
     const formData = new FormData(form);
 
     try {
