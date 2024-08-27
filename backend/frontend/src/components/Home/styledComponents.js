@@ -14,14 +14,14 @@ const fadeInUp = keyframes`
 `;
 
 export const HomeContainer = styled.div`
-  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 
   @media screen and (min-width: 992px) {
-    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
   }
 `;
 
@@ -33,7 +33,7 @@ export const ContentWrapper = styled.div`
   flex: 1; /* Take up remaining space to center content */
   padding: min(20vw, 20vh) 5vw;
   @media screen and (min-width: 1024px) {
-    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
     padding: 5vw;
   }
 `;

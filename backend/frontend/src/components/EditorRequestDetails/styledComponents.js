@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
 export const RequestDetailsSection = styled.div`
-  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
   padding: 0px 5vw 24px;
   display: flex;
   flex-direction: column;
   cursor: ${(props) => props.wait && "wait"};
   @media screen and (min-width: 992px) {
-    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
   }
 `;
 

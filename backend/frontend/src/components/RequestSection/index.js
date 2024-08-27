@@ -79,10 +79,22 @@ class RequestSection extends Component {
   }
 
   onNewRequest = () => {
-    window.location.reload();
+    this.setState({
+      responseStatus: "",
+      videoUrl: "",
+      thumbnailUrl: "",
+      videoTitle: "",
+      videoDescription: "",
+      creatorInvitationCode: "",
+      selectedVisibility: "",
+      selectedCategory: "",
+      titleFocused: false,
+      showVisibilityContainer: false,
+      showCategoriesContainer: false,
+    });
   };
 
-  checkAllFields = () => {
+  checkAllFields = async () => {
     const { videoUrl, thumbnailUrl, videoTitle, videoDescription } = this.state;
     let isValid = true;
 
@@ -128,8 +140,39 @@ class RequestSection extends Component {
 
     const invitationCode = document.getElementById("creator").value;
     if (!invitationCode) {
-      this.setState({ invitationError: "Please give creator invitation code" });
+      this.setState({
+        invitationError: "Please provide the creator's invitation code",
+      });
       isValid = false;
+    }
+    if (invitationCode) {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/check_invitation_code`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ invitationCode }),
+          }
+        );
+
+        if (!response.ok) {
+          isValid = false;
+          const data = await response.json();
+          this.setState({
+            invitationError: data.message,
+          });
+        }
+      } catch (error) {
+        console.error("Error during invitation code check:", error);
+        this.setState({
+          invitationError: "An unexpected error occurred. Please try again.",
+        });
+        isValid = false;
+      }
     }
 
     return isValid;
@@ -138,7 +181,9 @@ class RequestSection extends Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!this.checkAllFields()) {
+    const allAreProperlyFilled = await this.checkAllFields();
+
+    if (!allAreProperlyFilled) {
       return;
     }
 

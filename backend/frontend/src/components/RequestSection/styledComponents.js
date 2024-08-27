@@ -3,13 +3,13 @@ import { TbReplace } from "react-icons/tb";
 import { FaChevronDown } from "react-icons/fa6";
 
 export const RequestSectionContainer = styled.div`
-  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
   padding: 0px 5vw 24px;
   display: flex;
   flex-direction: column;
 
   @media screen and (min-width: 992px) {
-    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
   }
 `;
 

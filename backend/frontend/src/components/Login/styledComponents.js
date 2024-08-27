@@ -1,8 +1,6 @@
 import styled, { keyframes } from "styled-components";
-import { IoMdClose } from "react-icons/io";
 import { GoArrowRight } from "react-icons/go";
 import { PiUserCircleLight } from "react-icons/pi";
-import { RxHamburgerMenu } from "react-icons/rx";
 
 const fadeInUp = keyframes`
   0% {
@@ -17,7 +15,7 @@ const fadeInUp = keyframes`
 
 export const LoginContainer = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -36,7 +34,7 @@ export const ContentWrapper = styled.div`
   flex: 1; /* Take up remaining space to center content */
   padding: calc(min(20vw, 20vh) - 60px) 5vw;
   @media screen and (min-width: 1024px) {
-    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
     padding: calc(5vw - 76px);
   }
 `;
@@ -78,102 +76,18 @@ export const HeaderList = styled.ul`
 export const HeaderItem = styled.li`
   list-style-type: none;
   font-weight: 500;
-  color: rgb(56, 63, 72);
+
   font-size: ${(props) => {
     return props.ratio * 15;
   }}px;
-  text-underline-offset: 10px;
+
   cursor: pointer;
-  display: ${(props) => (props.about || props.contact ? "none" : "block")};
-
-  ${(props) =>
-    props.menu &&
-    `
-    display: flex;
-    flex-direction: column;
-  `}
-  transition: color 0.3s ease, text-decoration 0.3 ease;
-
-  &:hover {
-    color: ${(props) => !props.username && "black"};
-    text-decoration: ${(props) =>
-      props.about || props.contact ? "underline" : "none"};
-  }
 
   @media screen and (min-width: 576px) {
-    display: ${(props) => (props.username ? "none" : "block")};
     font-size: ${(props) => {
       return props.ratio * 17;
     }}px;
   }
-  @media screen and (min-width: 768px) {
-    display: block;
-  }
-`;
-
-export const LoginMenuLogo = styled(RxHamburgerMenu)`
-  width: 22px;
-  height: 16px;
-
-  @media screen and (min-width: 768px) {
-    display: none;
-  }
-`;
-
-export const MenuContainer = styled.ul`
-  padding: 0px;
-  width: 300px;
-  height: 100vh;
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  overflow-y: auto;
-  background: white;
-  transition: width 0.5s ease-in 0s;
-  transform: translate(0px);
-  box-shadow: rgb(224, 231, 238) 0px 0px 0px 1px,
-    rgba(0, 0, 0, 0.12) 2px 6px 10px 0px;
-  border-radius: 6px;
-  display: ${(props) => (props.show ? "block" : "none")};
-
-  font-size: ${(props) => {
-    return props.ratio * 14;
-  }}px;
-
-  @media screen and (min-width: 768px) {
-    max-height: 70vh;
-    width: 350px;
-    top: 55px;
-    right: 2vw;
-    font-size: ${(props) => {
-      return props.ratio * 17;
-    }}px;
-  }
-
-  @media screen and (min-width: 1200px) {
-    max-height: 60vh;
-  }
-`;
-
-export const MenuItem = styled.li`
-  list-style-type: none;
-  height: 50px;
-  border-top: 1px solid rgba(123, 135, 148, 0.16);
-  display: flex;
-  align-items: center;
-  padding: 0px 26px;
-  font-weight: 500;
-  color: rgb(97, 110, 124);
-
-  @media screen and (min-width: 992px) {
-    height: 60px;
-  }
-`;
-
-export const MenuCloseIcon = styled(IoMdClose)`
-  width: 20px;
-  height: 20px;
-  margin-left: auto;
 `;
 
 export const AnchorTag = styled.a`
@@ -238,10 +152,10 @@ export const SignInUserImg = styled(PiUserCircleLight)`
 export const LoginMainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
 
   @media screen and (min-height: 768px) {
-    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
   }
 `;
 

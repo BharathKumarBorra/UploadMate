@@ -297,6 +297,58 @@ app.get("/user/details", ensureAuthenticated, async (req, res) => {
   }
 });
 
+//check invitation code
+app.post(
+  "/check_invitation_code",
+  ensureAuthenticated,
+  async (request, response) => {
+    try {
+      const invitationCode = request.body.invitationCode;
+      const { email } = request.user;
+
+      // Retrieve the user's own invitation code
+      const getOwnInvitationCodeQuery = `
+      SELECT invitation_code FROM users WHERE email = ?
+    `;
+      const ownInvCodeResponse = await mdb.get(getOwnInvitationCodeQuery, [
+        email,
+      ]);
+
+      // Retrieve all invitation codes from the database
+      const getAllInvitationCodesQuery = `
+      SELECT invitation_code FROM users
+    `;
+      const allInvitationCodes = await mdb.all(getAllInvitationCodesQuery);
+
+      // Check if the invitation code matches the user's own code
+      if (invitationCode === ownInvCodeResponse.invitation_code) {
+        return response
+          .status(400)
+          .json({ message: "Please fill other user's valid invitation code" });
+      }
+
+      // Check if the invitation code exists in the database
+      const isValidCode = allInvitationCodes.some(
+        (code) => code.invitation_code === invitationCode
+      );
+
+      if (!isValidCode) {
+        return response
+          .status(400)
+          .json({ message: "Please fill a valid invitation code" });
+      }
+
+      // If all checks pass, return a success response
+      response.status(200).json({ message: "Invitation code is valid" });
+    } catch (error) {
+      console.log("Error in checking invitation code: ", error);
+      response.status(500).json({
+        message: "Internal server error, unable to check invitation code",
+      });
+    }
+  }
+);
+
 // Request video upload
 app.post(
   "/upload-request",

@@ -76,9 +76,11 @@ export const QuestionAndSupport = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   @media screen and (min-width: 576px) {
     text-align: start;
+    align-items: flex-start;
   }
 `;
 

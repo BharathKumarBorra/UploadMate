@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Redirect, withRouter } from "react-router-dom";
+import { Component } from "react";
+import { Redirect } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 import Footer from "../Footer";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
@@ -10,10 +10,6 @@ import {
   ProxyLogo,
   HeaderList,
   HeaderItem,
-  LoginMenuLogo,
-  MenuContainer,
-  MenuItem,
-  MenuCloseIcon,
   AnchorTag,
   SignInButton,
   SignInUserImg,
@@ -36,7 +32,6 @@ class Login extends Component {
     this.state = {
       isAuthenticated: false,
       loading: true,
-      showMenuContainer: false,
     };
   }
 
@@ -47,7 +42,7 @@ class Login extends Component {
   checkAuthStatus = async () => {
     try {
       const response = await fetch(
-        "https://youtube-jwt-proxy.onrender.com/oauth/status",
+        `https://youtube-jwt-proxy.onrender.com/user/details/oauth/status`,
         {
           method: "GET",
           credentials: "include", // Include cookies with the request
@@ -55,7 +50,6 @@ class Login extends Component {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         this.setState({
           isAuthenticated: data.authenticated,
           loading: false,
@@ -74,12 +68,6 @@ class Login extends Component {
     }
   };
 
-  onCloseMenuContainer = () => {
-    this.setState({
-      showMenuContainer: false,
-    });
-  };
-
   renderLoading = () => {
     return (
       <div className="request-section loading-section">
@@ -89,10 +77,9 @@ class Login extends Component {
   };
 
   renderLoginSection = (activeLanguage, fsr, sUl) => {
-    const { showMenuContainer } = this.state;
     const { upperDescription, mainDescription, lowerDescription, headerItems } =
       getSectionData(loginSectionContent, activeLanguage);
-    const { about, contact, signIn } = headerItems;
+    const { signIn } = headerItems;
     return (
       <LoginContainer>
         <HeaderContainer>
@@ -102,38 +89,13 @@ class Login extends Component {
           />
 
           <HeaderList className="header-list">
-            <HeaderItem about ratio={fsr}>
-              {about}
-            </HeaderItem>
-            <HeaderItem contact ratio={fsr}>
-              {contact}
-            </HeaderItem>
             <HeaderItem ratio={fsr}>
-              <AnchorTag
-                href="https://youtube-jwt-proxy.onrender.com/oauth/google"
-                sUl={sUl}
-              >
+              <AnchorTag href="http://localhost:5000/oauth/google" sUl={sUl}>
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
                   <SignInUserImg />
                   {signIn}
                 </SignInButton>
               </AnchorTag>
-            </HeaderItem>
-            <HeaderItem menu>
-              <LoginMenuLogo onClick={this.onToggleMenuContainer} />
-
-              <MenuContainer show={showMenuContainer} ratio={fsr}>
-                <MenuItem className="menu-item menu-sign-in-item">
-                  <a href="https://youtube-jwt-proxy.onrender.com/oauth/google">
-                    <SignInButton className="sign-in-button">
-                      {signIn}
-                    </SignInButton>
-                  </a>
-                  <MenuCloseIcon onClick={this.onCloseMenuContainer} />
-                </MenuItem>
-                <MenuItem>{about}</MenuItem>
-                <MenuItem>{contact} </MenuItem>
-              </MenuContainer>
             </HeaderItem>
           </HeaderList>
         </HeaderContainer>
@@ -144,14 +106,13 @@ class Login extends Component {
             <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
             <LowerDescription ratio={fsr}>{lowerDescription}</LowerDescription>
 
-            <StyledAnchorTag
-              href={`https://youtube-jwt-proxy.onrender.com/oauth/google`}
-            >
+            <StyledAnchorTag href="http://localhost:5000/oauth/google">
               <GetStartedButton ratio={fsr}>
                 Get Started <StyledArrow />
               </GetStartedButton>
             </StyledAnchorTag>
           </ContentWrapper>
+
           <FooterWrapper>
             <Footer />
           </FooterWrapper>
@@ -177,6 +138,7 @@ class Login extends Component {
             showUnderLines: sUl,
           } = value;
           const fsr = fontSizeRatio;
+          console.log(fontSizeRatio);
 
           return (
             <div className={`${showInGray && "show-in-gray"} bg-container`}>
@@ -192,4 +154,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+export default Login;

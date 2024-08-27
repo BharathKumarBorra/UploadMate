@@ -130,7 +130,7 @@ const slideOut = keyframes`
 export const MenuContainer = styled.ul`
   padding: 0px;
   width: 300px;
-  height: 100vh;
+  height: 100dvh;
   position: fixed;
   top: 0px;
   right: 0px;

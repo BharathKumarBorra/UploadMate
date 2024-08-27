@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const EditorSectionContainer = styled.div`
-  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
   padding: 0px 5vw 24px;
   display: flex;
   flex-direction: column;
 
   @media screen and (min-width: 992px) {
-    min-height: calc(100vh - 76px);
+    min-height: calc(100dvh - 76px);
   }
 `;
 
@@ -103,7 +103,7 @@ export const TableElement = styled.li`
 
 //no requests section styling
 export const NoRequestsContainer = styled.div`
-  min-height: calc(100vh - 160px);
+  min-height: calc(100dvh - 160px);
   padding: 1vw 2vw;
   display: flex;
   flex-direction: column;
@@ -111,7 +111,7 @@ export const NoRequestsContainer = styled.div`
   justify-content: center;
 
   @media screen and (min-width: 992px) {
-    min-height: calc(100vh - 180px);
+    min-height: calc(100dvh - 180px);
   }
 `;
 

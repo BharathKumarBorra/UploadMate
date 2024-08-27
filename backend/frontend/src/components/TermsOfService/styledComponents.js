@@ -1,17 +1,25 @@
 import styled from "styled-components";
 
 export const TOSContainer = styled.div`
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: #f7f9fb;
-  padding-bottom: min(5vw, 5vh);
+  padding: calc(60px + 5vw) 0 min(5vw, 5vh);
+  position: relative;
+  @media screen and (min-width: 992px) {
+    padding-top: calc(76px + 5vw);
+  }
 `;
 
 export const TOSHeader = styled.div`
+  width: 100%;
+
   background-color: white;
   height: 60px;
   padding: 0 5vw;
   display: flex;
   align-items: center;
+  position: fixed;
+  top: 0;
 
   box-shadow: rgba(31, 45, 61, 0.15) 0px 2px 2px 0px;
   z-index: 1000;
