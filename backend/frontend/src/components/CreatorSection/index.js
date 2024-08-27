@@ -32,7 +32,6 @@ class CreatorSection extends Component {
     requestsList: [],
     loading: true,
     fetchingErrorStatus: "",
-    isProcessing: false,
   };
 
   componentDidMount() {
@@ -44,7 +43,6 @@ class CreatorSection extends Component {
       loading: true,
       selectedFilter: status,
     });
-
     try {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/requests?role=creator${
@@ -52,7 +50,7 @@ class CreatorSection extends Component {
         }`,
         {
           method: "GET",
-          credentials: "include", // Include cookies with the request
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -90,9 +88,6 @@ class CreatorSection extends Component {
   };
 
   onApprove = async (videoId) => {
-    this.setState({
-      isProcessing: true,
-    });
     try {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
@@ -115,15 +110,9 @@ class CreatorSection extends Component {
     } catch (err) {
       toast.error("Failed to process request");
     }
-    this.setState({
-      isProcessing: false,
-    });
   };
 
   onReject = async (videoId) => {
-    this.setState({
-      isProcessing: true,
-    });
     try {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
@@ -146,9 +135,6 @@ class CreatorSection extends Component {
     } catch (err) {
       toast.error("Failed to process request");
     }
-    this.setState({
-      isProcessing: false,
-    });
   };
 
   renderLoading = () => {
@@ -177,7 +163,7 @@ class CreatorSection extends Component {
   };
 
   renderCreatorSection = (renderRequestsSectionContent, fsr, sUl) => {
-    const { loading, requestsList, selectedFilter, isProcessing } = this.state;
+    const { loading, requestsList, selectedFilter } = this.state;
     const {
       creatorSectionHeading,
       video,
@@ -230,7 +216,6 @@ class CreatorSection extends Component {
                     onApprove={this.onApprove}
                     onReject={this.onReject}
                     fsr={fsr}
-                    isProcessing={isProcessing}
                   />
                 ))}
               </RequestsContainer>

@@ -37,7 +37,9 @@ class CreatorRequestDetails extends Component {
     this.state = {
       requestDetails: {},
       loading: true,
-      isProcessing: false,
+
+      isApproveProcessing: false,
+      isRejectProcessing: false,
       fetchingErrorStatus: "",
     };
   }
@@ -59,7 +61,7 @@ class CreatorRequestDetails extends Component {
         `https://youtube-jwt-proxy.onrender.com/requests/${videoId}`,
         {
           method: "GET",
-          credentials: "include", // Include cookies with the request
+          credentials: "include",
         }
       );
 
@@ -104,7 +106,7 @@ class CreatorRequestDetails extends Component {
   onApprove = async () => {
     const { videoId } = this.props.match.params;
     this.setState({
-      isProcessing: true,
+      isApproveProcessing: true,
     });
     try {
       const response = await fetch(
@@ -129,7 +131,7 @@ class CreatorRequestDetails extends Component {
       toast.error("Failed to process request");
     }
     this.setState({
-      isProcessing: false,
+      isApproveProcessing: false,
     });
   };
 
@@ -137,7 +139,7 @@ class CreatorRequestDetails extends Component {
     const { videoId } = this.props.match.params;
 
     this.setState({
-      isProcessing: true,
+      isRejectProcessing: true,
     });
 
     try {
@@ -198,7 +200,8 @@ class CreatorRequestDetails extends Component {
   };
 
   renderRequestDetailsSection = (renderRequestDetailsContent, fsr) => {
-    const { requestDetails, isProcessing } = this.state;
+    const { requestDetails, isApproveProcessing, isRejectProcessing } =
+      this.state;
     const {
       requestHeading,
       video,
@@ -245,7 +248,7 @@ class CreatorRequestDetails extends Component {
     )[0].category;
 
     return (
-      <RequestDetailsSection wait={isProcessing}>
+      <RequestDetailsSection wait={isApproveProcessing || isRejectProcessing}>
         <RequestHeading ratio={fsr}>{requestHeading}</RequestHeading>
         <MediaContainer>
           <MediaCard>
@@ -331,11 +334,11 @@ class CreatorRequestDetails extends Component {
             <Button
               onClick={this.onApprove}
               ratio={fsr}
-              disabled={isProcessing}
-              isProcessing={isProcessing}
+              disabled={isApproveProcessing || isRejectProcessing}
+              isProcessing={isApproveProcessing || isRejectProcessing}
               approve_
             >
-              {isProcessing ? (
+              {isApproveProcessing ? (
                 <Oval color="var(--approve-color)" height="17" width="17" />
               ) : (
                 approve
@@ -344,11 +347,11 @@ class CreatorRequestDetails extends Component {
             <Button
               onClick={this.onReject}
               ratio={fsr}
-              disabled={isProcessing}
-              isProcessing={isProcessing}
+              disabled={isApproveProcessing || isRejectProcessing}
+              isProcessing={isApproveProcessing || isRejectProcessing}
               reject_
             >
-              {isProcessing ? (
+              {isRejectProcessing ? (
                 <Oval color="var(--secondary-color)" height="17" width="17" />
               ) : (
                 reject

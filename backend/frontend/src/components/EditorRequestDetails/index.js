@@ -49,7 +49,9 @@ class EditorRequestDetails extends Component {
     this.state = {
       requestDetails: {},
       loading: true,
-      isProcessing: false,
+
+      isUploadOrResendProcessing: false,
+      isDeleteProcessing: false,
       fetchingErrorStatus: "",
       uploadResponse: "",
       uploadResponseMessage: "",
@@ -74,7 +76,7 @@ class EditorRequestDetails extends Component {
         `https://youtube-jwt-proxy.onrender.com/requests/${videoId}`,
         {
           method: "GET",
-          credentials: "include", // Include cookies with the request
+          credentials: "include",
         }
       );
       if (!response.ok) {
@@ -120,7 +122,7 @@ class EditorRequestDetails extends Component {
     const { videoId } = this.props.match.params;
     const { history } = this.props;
     this.setState({
-      isProcessing: true,
+      isDeleteProcessing: true,
     });
     try {
       const response = await fetch(
@@ -140,13 +142,13 @@ class EditorRequestDetails extends Component {
         }, 2000);
       } else {
         this.setState({
-          isProcessing: false,
+          isDeleteProcessing: false,
         });
         toast.error("Failed to Delete");
       }
     } catch (err) {
       this.setState({
-        isProcessing: false,
+        isDeleteProcessing: false,
       });
       toast.error("Failed to delete");
     }
@@ -250,27 +252,27 @@ class EditorRequestDetails extends Component {
   resendRequest = async () => {
     const { requestDetails } = this.state;
     const { videoId } = requestDetails;
-    this.setState({ isProcessing: true });
+    this.setState({ isUploadOrResendProcessing: true });
 
     try {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/resend/${videoId}`,
         {
           method: "GET",
-          credentials: "include", // Include cookies with the request
+          credentials: "include",
         }
       );
       if (response.ok) {
         alert("Resent successfully");
         window.location.reload();
       } else {
-        this.setState({ isProcessing: false });
+        this.setState({ isUploadOrResendProcessing: false });
         throw new Error("Error in resending. Please try again.");
       }
     } catch (error) {
       console.error("Error in resending:", error);
 
-      this.setState({ isProcessing: false });
+      this.setState({ isUploadOrResendProcessing: false });
       throw new Error("Error in resending. Please try again.");
     }
   };
@@ -354,7 +356,8 @@ class EditorRequestDetails extends Component {
     activeLanguage,
     fsr
   ) => {
-    const { requestDetails, isProcessing } = this.state;
+    const { requestDetails, isUploadOrResendProcessing, isDeleteProcessing } =
+      this.state;
     const {
       requestHeading,
       video,
@@ -401,7 +404,9 @@ class EditorRequestDetails extends Component {
 
     return (
       <>
-        <RequestDetailsSection wait={isProcessing}>
+        <RequestDetailsSection
+          wait={isUploadOrResendProcessing || isDeleteProcessing}
+        >
           <RequestHeading ratio={fsr}>{requestHeading}</RequestHeading>
           <MediaContainer>
             <MediaCard>
@@ -498,8 +503,10 @@ class EditorRequestDetails extends Component {
                   <Button
                     onClick={() => this.onUploadVideo(activeLanguage)}
                     upload
-                    disabled={isProcessing}
-                    isProcessing={isProcessing}
+                    disabled={isUploadOrResendProcessing || isDeleteProcessing}
+                    isProcessing={
+                      isUploadOrResendProcessing || isDeleteProcessing
+                    }
                   >
                     {upload}
                   </Button>
@@ -508,10 +515,12 @@ class EditorRequestDetails extends Component {
                 <Button
                   onClick={this.resendRequest}
                   resend
-                  disabled={isProcessing}
-                  isProcessing={isProcessing}
+                  disabled={isUploadOrResendProcessing || isDeleteProcessing}
+                  isProcessing={
+                    isUploadOrResendProcessing || isDeleteProcessing
+                  }
                 >
-                  {isProcessing ? (
+                  {isUploadOrResendProcessing ? (
                     <Oval color="var(--primary-color)" height="17" width="17" />
                   ) : (
                     resendRequest
@@ -525,10 +534,12 @@ class EditorRequestDetails extends Component {
                   onClick={this.onDeleteRequest}
                   ratio={fsr}
                   delete
-                  disabled={isProcessing}
-                  isProcessing={isProcessing}
+                  disabled={isUploadOrResendProcessing || isDeleteProcessing}
+                  isProcessing={
+                    isUploadOrResendProcessing || isDeleteProcessing
+                  }
                 >
-                  {isProcessing ? (
+                  {isDeleteProcessing ? (
                     <Oval
                       color="var(--secondary-color)"
                       height="17"

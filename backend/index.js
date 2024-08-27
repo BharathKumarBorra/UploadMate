@@ -316,16 +316,11 @@ app.post(
         category_id: categoryId,
       } = request.body;
 
-      // Fetch creator username from database
-      const creatorUserNameQuery = `SELECT username FROM USERS WHERE invitation_code=?;`;
+      const creatorUserNameQuery = `SELECT username from USERS where invitation_code=?;`;
       const creatorUserNameResponse = await mdb.get(creatorUserNameQuery, [
         creatorInvitationCode,
       ]);
-      if (!creatorUserNameResponse) {
-        return response
-          .status(400)
-          .send({ message: "Invalid invitation code" });
-      }
+      console.log("creator user name Response: ", creatorUserNameResponse);
       const creatorUserName = creatorUserNameResponse.username;
 
       // Upload thumbnail to Cloudinary
@@ -333,22 +328,22 @@ app.post(
       const thumbnailUploadResponse = await v2.uploader.upload(thumbnailPath, {
         resource_type: "image",
       });
-      fs.unlinkSync(thumbnailPath); // Delete thumbnail from local storage
+      fs.unlinkSync(thumbnailPath);
 
       // Upload video to Cloudinary
       const videoPath = request.files["video"][0].path;
       const videoUploadResponse = await v2.uploader.upload(videoPath, {
         resource_type: "video",
       });
-      fs.unlinkSync(videoPath); // Delete video from local storage
+      fs.unlinkSync(videoPath);
 
-      // Insert video details into the database
+      // Insert video details into database
       const addDetailsQuery = `
         INSERT INTO VIDEOS(video_url, title, description, thumbnail_url, audience, category_id,
                             privacy_status, request_status, from_user, to_user, video_public_id, thumbnail_public_id) 
         VALUES(?, ?, ?, ?, ?, ?, ?,'pending', ?, ?, ?, ?);
       `;
-      await mdb.run(addDetailsQuery, [
+      const addingResponse = await mdb.run(addDetailsQuery, [
         videoUploadResponse.url,
         title,
         description,
@@ -364,10 +359,7 @@ app.post(
 
       return response.status(200).send({ message: "Upload successful" });
     } catch (error) {
-      console.error("Error during upload:", error);
-      return response
-        .status(500)
-        .send({ message: "Upload failed", error: error.message });
+      return response.status(500).send({ message: "Upload failed" });
     }
   }
 );

@@ -216,6 +216,7 @@ export const ButtonsContainer = styled.div`
   margin-top: 12px;
   display: flex;
   align-items: center;
+
   gap: 20px;
 `;
 
@@ -277,6 +278,8 @@ export const UploadResponseMessage = styled(LoadingText)``;
 
 export const Button = styled.button`
   min-width: 70px;
+  display: flex;
+  justify-content: center;
   font-size: ${(props) => {
     if (props.ratio > 1) {
       return (1 + (props.ratio - 1) / 2) * 14;

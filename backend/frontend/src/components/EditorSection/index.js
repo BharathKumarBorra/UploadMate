@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
 import { ToastContainer, Slide, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
@@ -46,18 +45,17 @@ class EditorSectionRequests extends Component {
     uploadResponse: "",
     uploadResponseMessage: "",
     uploadResponseImg: "",
-    isProcessing: false,
   };
 
   componentDidMount() {
     this.getRequests();
   }
+
   getRequests = async (status = "") => {
     this.setState({
       loading: true,
       selectedFilter: status,
     });
-
     try {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/requests?role=editor${
@@ -65,7 +63,7 @@ class EditorSectionRequests extends Component {
         }`,
         {
           method: "GET",
-          credentials: "include", // Include cookies with the request
+          credentials: "include",
         }
       );
 
@@ -76,7 +74,6 @@ class EditorSectionRequests extends Component {
         });
         return;
       }
-
       const data = await response.json();
 
       const updatedData = data.map((eachItem) => ({
@@ -108,9 +105,6 @@ class EditorSectionRequests extends Component {
   };
 
   deleteRequest = async (videoId) => {
-    this.setState({
-      isProcessing: true,
-    });
     try {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/delete/${videoId}`,
@@ -132,9 +126,6 @@ class EditorSectionRequests extends Component {
       toast.error("Failed to delete");
       console.log("error occurred: ", error);
     }
-    this.setState({
-      isProcessing: false,
-    });
   };
 
   uploadVideo = async (activeLanguage, videoId) => {
@@ -233,16 +224,12 @@ class EditorSectionRequests extends Component {
   };
 
   resendRequest = async (videoId) => {
-    this.setState({
-      isProcessing: true,
-    });
-
     try {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/resend/${videoId}`,
         {
           method: "GET",
-          credentials: "include", // Include cookies with the request
+          credentials: "include",
         }
       );
       if (response.ok) {
@@ -256,9 +243,6 @@ class EditorSectionRequests extends Component {
 
       toast.error("Error while Resending.Please try again.");
     }
-    this.setState({
-      isProcessing: false,
-    });
   };
 
   renderLoading = () => {
@@ -343,7 +327,7 @@ class EditorSectionRequests extends Component {
     fsr,
     sUl
   ) => {
-    const { loading, requestsList, selectedFilter, isProcessing } = this.state;
+    const { loading, requestsList, selectedFilter } = this.state;
     const {
       editorSectionHeading,
       video,
@@ -399,7 +383,6 @@ class EditorSectionRequests extends Component {
                     uploadVideo={this.uploadVideo}
                     deleteRequest={this.deleteRequest}
                     resendRequest={this.resendRequest}
-                    isProcessing={isProcessing}
                     activeLanguage={activeLanguage}
                     fsr={fsr}
                   />
@@ -470,4 +453,4 @@ class EditorSectionRequests extends Component {
   }
 }
 
-export default withRouter(EditorSectionRequests);
+export default EditorSectionRequests;
