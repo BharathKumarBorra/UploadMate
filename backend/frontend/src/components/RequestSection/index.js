@@ -91,6 +91,14 @@ class RequestSection extends Component {
       titleFocused: false,
       showVisibilityContainer: false,
       showCategoriesContainer: false,
+      thumbnailError: "",
+      videoError: "",
+      titleError: "",
+      descriptionError: "",
+      audienceError: "",
+      visibilityError: "",
+      categoryError: "",
+      invitationError: "",
     });
   };
 
@@ -196,7 +204,7 @@ class RequestSection extends Component {
 
     try {
       const response = await fetch(
-        "https://youtube-jwt-proxy.onrender.com/upload-request",
+        `https://youtube-jwt-proxy.onrender.com/upload-request`,
         {
           method: "POST",
           body: formData,
