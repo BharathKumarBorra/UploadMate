@@ -166,7 +166,7 @@ export const PendingStatusAndButtonsContainer = styled.div`
 export const ButtonsContainer = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 1.5rem;
+  column-gap: 1.2rem;
 `;
 
 export const RequestedDateTime = styled.p`

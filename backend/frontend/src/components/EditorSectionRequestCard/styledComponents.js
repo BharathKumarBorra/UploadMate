@@ -157,7 +157,7 @@ export const Status = styled.span`
 export const ButtonsContainer = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 1.5rem;
+  column-gap: 1.2rem;
 `;
 
 export const VideoUploadedText = styled.p`
