@@ -73,6 +73,8 @@ router.get(
 
 router.get("/logout", (req, res) => {
   try {
+    const token = req.cookies.token;
+
     res.cookie("token", token, {
       secure: true,
       sameSite: "None",
