@@ -146,7 +146,7 @@ class CreatorRequestDetails extends Component {
       const response = await fetch(
         `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
