@@ -65,6 +65,11 @@ export const ProxyLogo = styled.img`
   cursor: pointer;
 `;
 
+export const ProxyName = styled.span`
+  font-size: 22p;
+  font-weight: 500;
+`;
+
 export const HeaderList = styled.ul`
   padding: 0px;
   display: flex;
@@ -230,6 +235,9 @@ export const LowerDescription = styled.p`
 export const StyledAnchorTag = styled.a`
   text-decoration: none;
   color: inherit;
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
 `;
 
 export const StyledArrow = styled(GoArrowRight)`

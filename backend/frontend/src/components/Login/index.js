@@ -8,6 +8,7 @@ import {
   LoginContainer,
   HeaderContainer,
   ProxyLogo,
+  ProxyName,
   HeaderList,
   HeaderItem,
   AnchorTag,
@@ -81,10 +82,13 @@ class Login extends Component {
     return (
       <LoginContainer>
         <HeaderContainer>
-          <ProxyLogo
-            alt="proxy-logo"
-            src="https://res.cloudinary.com/drbnxuf21/image/upload/v1721970847/b8lpaayftkzohhgrs6cl.png"
-          />
+          <StyledAnchorTag href="https://youtube-proxy1.onrender.com">
+            <ProxyLogo
+              alt="proxy-logo"
+              src="https://res.cloudinary.com/drbnxuf21/image/upload/v1724861187/yjyhndpczwgeln8rounu.png"
+            />
+            <ProxyName>Proxy</ProxyName>
+          </StyledAnchorTag>
 
           <HeaderList className="header-list">
             <HeaderItem ratio={fsr}>

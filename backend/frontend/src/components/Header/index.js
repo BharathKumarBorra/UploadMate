@@ -7,6 +7,7 @@ import defaultUserImage from "./default-avatar-profile-icon-vector-social-media-
 import {
   HeaderContainer,
   ProxyLogo,
+  ProxyName,
   HeaderList,
   HeaderItem,
   StyledLink,
@@ -197,8 +198,9 @@ class Header extends Component {
               <StyledLink to="/">
                 <ProxyLogo
                   alt="proxy-logo"
-                  src="https://res.cloudinary.com/drbnxuf21/image/upload/v1721970847/b8lpaayftkzohhgrs6cl.png"
+                  src="https://res.cloudinary.com/drbnxuf21/image/upload/v1724861187/yjyhndpczwgeln8rounu.png"
                 />
+                <ProxyName>Proxy</ProxyName>
               </StyledLink>
 
               <HeaderList>

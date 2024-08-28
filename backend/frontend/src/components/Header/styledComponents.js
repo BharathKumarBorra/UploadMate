@@ -32,6 +32,11 @@ export const ProxyLogo = styled.img`
   cursor: pointer;
 `;
 
+export const ProxyName = styled.span`
+  font-size: 22px;
+  font-weight: 500;
+`;
+
 export const HeaderList = styled.ul`
   padding-left: 0px;
   display: flex;
@@ -79,7 +84,11 @@ export const HeaderItem = styled.li`
 
 export const StyledLink = styled(Link)`
   text-decoration: ${(props) => (props.sUl ? "underline" : "none")};
+
   color: inherit;
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
 `;
 
 export const MenuLogo = styled(RxHamburgerMenu)`
