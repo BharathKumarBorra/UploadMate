@@ -3,6 +3,8 @@ const cookieParser = require("cookie-parser");
 const { v2 } = require("cloudinary");
 const passport = require("./oauth/passportConfig");
 const cors = require("cors");
+const path = require("path");
+
 const { initializeDB } = require("./db");
 require("dotenv").config();
 
