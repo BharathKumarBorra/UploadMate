@@ -42,7 +42,7 @@ class Login extends Component {
   checkAuthStatus = async () => {
     try {
       const response = await fetch(
-        `https://youtube-proxy1.onrender.com/user/details/oauth/status`,
+        `https://youtube-proxy1.onrender.com/oauth/status`,
         {
           method: "GET",
           credentials: "include", // Include cookies with the request
