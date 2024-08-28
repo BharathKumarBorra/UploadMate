@@ -125,8 +125,10 @@ class Header extends Component {
 
   onLogout = () => {
     // Remove JWT token from cookies
-    // Cookies.remove('token');
-    // this.props.history.replace('/login');
+    document.cookie = "jwtToken=; Max-Age=0; path=/; domain=yourdomain.com;";
+
+    // Optionally redirect to the login page or home page after logout
+    window.location.href = "/login";
   };
 
   copyToClipboard = () => {
