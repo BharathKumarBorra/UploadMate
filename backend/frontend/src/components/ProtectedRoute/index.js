@@ -18,7 +18,7 @@ class ProtectedRoute extends Component {
   checkAuthStatus = async () => {
     try {
       const response = await fetch(
-        "https://youtube-jwt-proxy.onrender.com/oauth/status",
+        "https://youtube-proxy.onrender.com/oauth/status",
         {
           method: "GET",
           credentials: "include", // Include cookies with the request

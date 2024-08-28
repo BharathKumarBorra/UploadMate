@@ -45,7 +45,7 @@ class CreatorSection extends Component {
     });
     try {
       const response = await fetch(
-        `https://youtube-jwt-proxy.onrender.com/requests?role=creator${
+        `https://youtube-proxy.onrender.com/requests?role=creator${
           status && `&req_status=${status}`
         }`,
         {
@@ -90,7 +90,7 @@ class CreatorSection extends Component {
   onApprove = async (videoId) => {
     try {
       const response = await fetch(
-        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
+        `https://youtube-proxy.onrender.com/response/${videoId}`,
         {
           method: "PUT",
           headers: {
@@ -115,7 +115,7 @@ class CreatorSection extends Component {
   onReject = async (videoId) => {
     try {
       const response = await fetch(
-        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
+        `https://youtube-proxy.onrender.com/response/${videoId}`,
         {
           method: "PUT",
           headers: {

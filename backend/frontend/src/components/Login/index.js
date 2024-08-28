@@ -42,7 +42,7 @@ class Login extends Component {
   checkAuthStatus = async () => {
     try {
       const response = await fetch(
-        `https://youtube-jwt-proxy.onrender.com/user/details/oauth/status`,
+        `https://youtube-proxy.onrender.com/user/details/oauth/status`,
         {
           method: "GET",
           credentials: "include", // Include cookies with the request
@@ -91,7 +91,7 @@ class Login extends Component {
           <HeaderList className="header-list">
             <HeaderItem ratio={fsr}>
               <AnchorTag
-                href="https://youtube-jwt-proxy.onrender.com/oauth/google"
+                href="https://youtube-proxy.onrender.com/oauth/google"
                 sUl={sUl}
               >
                 <SignInButton className="sign-in-button" outline ratio={fsr}>
@@ -109,7 +109,7 @@ class Login extends Component {
             <MainDescription ratio={fsr}>{mainDescription}</MainDescription>
             <LowerDescription ratio={fsr}>{lowerDescription}</LowerDescription>
 
-            <StyledAnchorTag href="https://youtube-jwt-proxy.onrender.com/oauth/google">
+            <StyledAnchorTag href="https://youtube-proxy.onrender.com/oauth/google">
               <GetStartedButton ratio={fsr}>
                 Get Started <StyledArrow />
               </GetStartedButton>

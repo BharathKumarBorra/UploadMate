@@ -58,7 +58,7 @@ class CreatorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `https://youtube-jwt-proxy.onrender.com/requests/${videoId}`,
+        `https://youtube-proxy.onrender.com/requests/${videoId}`,
         {
           method: "GET",
           credentials: "include",
@@ -110,7 +110,7 @@ class CreatorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
+        `https://youtube-proxy.onrender.com/response/${videoId}`,
         {
           method: "PUT",
           headers: {
@@ -144,7 +144,7 @@ class CreatorRequestDetails extends Component {
 
     try {
       const response = await fetch(
-        `https://youtube-jwt-proxy.onrender.com/response/${videoId}`,
+        `https://youtube-proxy.onrender.com/response/${videoId}`,
         {
           method: "PUT",
           headers: {
