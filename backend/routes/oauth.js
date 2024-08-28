@@ -73,10 +73,12 @@ router.get(
 
 router.get("/logout", (req, res) => {
   try {
-    res.cookie("token", "", {
+    res.cookie("token", token, {
       secure: true,
       sameSite: "None",
-      maxAge: -1, // Set to a negative value to expire the cookie immediately
+      maxAge: -1,
+      httpOnly: true,
+      expires: new Date(0),
     });
 
     return res.status(200).send("Successfully logged out");
