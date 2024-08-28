@@ -6,13 +6,13 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 router.get("/oauth/status", async (req, res) => {
-  const token = req.cookies.token; // Get token from cookies
-  console.log("backend cookies: ", req.cookies);
+  const token = req.cookies.jwtToken; // Ensure this matches the cookie name used throughout
 
-  console.log("token from cookies:", token);
+  console.log("Backend cookies:", req.cookies);
+  console.log("Token from cookies:", token);
 
   if (!token) {
-    return res.send({ authenticated: false });
+    return res.status(200).json({ authenticated: false }); // Explicitly send JSON response
   }
 
   try {
@@ -24,13 +24,13 @@ router.get("/oauth/status", async (req, res) => {
 
     if (!userDetailsObj) {
       console.log("User not found");
-      return res.send({ authenticated: false });
+      return res.status(200).json({ authenticated: false }); // Explicitly send JSON response
     }
 
-    res.send({ authenticated: true });
+    res.status(200).json({ authenticated: true }); // Explicitly send JSON response
   } catch (err) {
     console.error("Token verification failed:", err);
-    res.send({ authenticated: false });
+    res.status(200).json({ authenticated: false }); // Explicitly send JSON response
   }
 });
 
@@ -84,10 +84,12 @@ router.get("/logout", (req, res) => {
       expires: new Date(0),
     });
 
-    return res.status(200).send("Successfully logged out");
+    return res.status(200).json({ message: "Successfully logged out" });
   } catch (error) {
     console.log("error while loggin out: ", error);
-    return res.status(500).send("An unexpected error occurred during logout.");
+    return res
+      .status(500)
+      .json({ message: "An unexpected error occurred during logout" });
   }
 });
 
