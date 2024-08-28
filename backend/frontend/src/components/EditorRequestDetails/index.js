@@ -73,7 +73,7 @@ class EditorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `https://youtube-proxy.onrender.com/requests/${videoId}`,
+        `https://youtube-proxy1.onrender.com/requests/${videoId}`,
         {
           method: "GET",
           credentials: "include",
@@ -126,7 +126,7 @@ class EditorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `https://youtube-proxy.onrender.com/delete/${videoId}`,
+        `https://youtube-proxy1.onrender.com/delete/${videoId}`,
         {
           method: "DELETE",
           headers: {
@@ -175,7 +175,7 @@ class EditorRequestDetails extends Component {
     });
     try {
       const response = await fetch(
-        `https://youtube-proxy.onrender.com/upload-video`,
+        `https://youtube-proxy1.onrender.com/upload-video`,
         {
           method: "POST",
           headers: {
@@ -256,7 +256,7 @@ class EditorRequestDetails extends Component {
 
     try {
       const response = await fetch(
-        `https://youtube-proxy.onrender.com/resend/${videoId}`,
+        `https://youtube-proxy1.onrender.com/resend/${videoId}`,
         {
           method: "GET",
           credentials: "include",

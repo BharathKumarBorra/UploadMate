@@ -156,7 +156,7 @@ class RequestSection extends Component {
     if (invitationCode) {
       try {
         const response = await fetch(
-          `https://youtube-proxy.onrender.com/check_invitation_code`,
+          `https://youtube-proxy1.onrender.com/check_invitation_code`,
           {
             method: "POST",
             credentials: "include",
@@ -204,7 +204,7 @@ class RequestSection extends Component {
 
     try {
       const response = await fetch(
-        `https://youtube-proxy.onrender.com/upload-request`,
+        `https://youtube-proxy1.onrender.com/upload-request`,
         {
           method: "POST",
           body: formData,
