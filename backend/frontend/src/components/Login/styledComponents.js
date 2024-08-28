@@ -68,6 +68,10 @@ export const ProxyLogo = styled.img`
 export const ProxyName = styled.span`
   font-size: 22p;
   font-weight: 500;
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: inline;
+  }
 `;
 
 export const HeaderList = styled.ul`
@@ -235,9 +239,13 @@ export const LowerDescription = styled.p`
 export const StyledAnchorTag = styled.a`
   text-decoration: none;
   color: inherit;
-  display: flex;
-  align-items: center;
-  column-gap: 4px;
+  ${(props) =>
+    props.headerItem &&
+    `
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+  `}
 `;
 
 export const StyledArrow = styled(GoArrowRight)`

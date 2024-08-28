@@ -197,7 +197,7 @@ class Header extends Component {
 
           return (
             <HeaderContainer>
-              <StyledLink to="/">
+              <StyledLink to="/" headerItem>
                 <ProxyLogo alt="proxy-logo" src={proxyLogo} />
                 <ProxyName>Proxy</ProxyName>
               </StyledLink>

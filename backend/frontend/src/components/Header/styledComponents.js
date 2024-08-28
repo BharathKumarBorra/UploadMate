@@ -35,6 +35,10 @@ export const ProxyLogo = styled.img`
 export const ProxyName = styled.span`
   font-size: 22px;
   font-weight: 500;
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: inline;
+  }
 `;
 
 export const HeaderList = styled.ul`
@@ -64,12 +68,34 @@ export const HeaderItem = styled.li`
     flex-direction: column;
   `)};
 
-  transition: color 0.3s ease, text-decoration 0.3 ease;
+  transition: color 0.3s ease;
 
   &:hover {
     color: ${(props) => !props.username && "black"};
-    text-decoration: ${(props) => props.request && "underline"};
   }
+
+  position: relative;
+  padding: 0.5rem 0;
+
+  ${(props) =>
+    props.request &&
+    `
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background-color: black;
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+      left: 0;
+    }
+  `}
 
   @media screen and (min-width: 576px) {
     display: ${(props) => (props.username ? "none" : "block")};
@@ -84,11 +110,14 @@ export const HeaderItem = styled.li`
 
 export const StyledLink = styled(Link)`
   text-decoration: ${(props) => (props.sUl ? "underline" : "none")};
-
   color: inherit;
-  display: flex;
-  align-items: center;
-  column-gap: 4px;
+  ${(props) =>
+    props.headerItem &&
+    `
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+  `}
 `;
 
 export const MenuLogo = styled(RxHamburgerMenu)`

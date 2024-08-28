@@ -85,7 +85,10 @@ class Login extends Component {
     return (
       <LoginContainer>
         <HeaderContainer>
-          <StyledAnchorTag href="https://youtube-proxy1.onrender.com">
+          <StyledAnchorTag
+            href="https://youtube-proxy1.onrender.com"
+            headerItem
+          >
             <ProxyLogo alt="proxy-logo" src={proxyLogo} />
             <ProxyName>Proxy</ProxyName>
           </StyledAnchorTag>
