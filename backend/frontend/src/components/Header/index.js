@@ -123,12 +123,21 @@ class Header extends Component {
     });
   };
 
-  onLogout = () => {
-    // Remove JWT token from cookies
-    document.cookie = "jwtToken=; Max-Age=0; path=/; domain=yourdomain.com;";
-
-    // Optionally redirect to the login page or home page after logout
-    window.location.href = "/login";
+  onLogout = async () => {
+    try {
+      // Make a request to the backend logout route
+      const response = await fetch("https://youtube-timer1/logout", {
+        method: "GET",
+        credentials: "include", // Ensure cookies are sent with the request
+      });
+      if (response.ok) {
+        window.location.href = "/login";
+      } else {
+        toast.error("unable to logout");
+      }
+    } catch (error) {
+      toast.error("An error occured during logout");
+    }
   };
 
   copyToClipboard = () => {

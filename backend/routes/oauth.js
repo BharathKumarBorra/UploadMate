@@ -71,4 +71,18 @@ router.get(
   })
 );
 
+router.get("/logout", (req, res) => {
+  try {
+    res.cookie("token", "", {
+      secure: true,
+      sameSite: "None",
+      maxAge: -1, // Set to a negative value to expire the cookie immediately
+    });
+
+    return res.status(200).send("Successfully logged out");
+  } catch (error) {
+    return res.status(500).send("An unexpected error occurred during logout.");
+  }
+});
+
 module.exports = router;
