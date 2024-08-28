@@ -127,7 +127,7 @@ class Header extends Component {
     try {
       // Make a request to the backend logout route
       const response = await fetch(
-        "https://youtube-timer1.onrender.com/logout",
+        "https://youtube-proxy1.onrender.com/logout",
         {
           method: "GET",
           credentials: "include", // Ensure cookies are sent with the request
