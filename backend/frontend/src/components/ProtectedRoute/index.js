@@ -26,19 +26,17 @@ class ProtectedRoute extends Component {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+
         this.setState({
           isAuthenticated: data.authenticated,
           loading: false,
         });
       } else {
-        console.log(response.statusText);
         this.setState({
           loading: false,
         });
       }
     } catch (error) {
-      console.error("Error checking authentication status:", error);
       this.setState({
         loading: false,
       });

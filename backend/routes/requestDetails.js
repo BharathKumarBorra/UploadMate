@@ -8,7 +8,6 @@ router.get("/requests", ensureAuthenticated, async (request, response) => {
   try {
     const mdb = getDB();
     const userName = request.user.username;
-    console.log(userName);
 
     const { role, req_status } = request.query;
     let requestType;
@@ -55,7 +54,6 @@ router.get("/requests", ensureAuthenticated, async (request, response) => {
 
     response.status(200).json(requestsResponse);
   } catch (error) {
-    console.error("Error retrieving requests:", error);
     response.status(500).send("Error retrieving requests");
   }
 });
@@ -68,18 +66,16 @@ router.get(
     try {
       const mdb = getDB();
       const { videoId } = request.params;
-      console.log("request params", request.params);
 
       const getRequestDetailsQuery = `SELECT * FROM VIDEOS WHERE id = ?;`;
       const dbResponse = await mdb.get(getRequestDetailsQuery, [videoId]);
-      console.log(dbResponse);
+
       if (dbResponse === undefined) {
         return response.status(404).send({ message: "details not found" });
       }
 
       return response.status(200).json(dbResponse);
     } catch (error) {
-      console.error("Error retrieving video details:", error);
       return response.status(500).send("Error retrieving video details");
     }
   }
@@ -114,7 +110,6 @@ router.get(
         });
       }
     } catch (error) {
-      console.error("Error in resending:", error);
       response
         .status(500)
         .json({ status: "error", message: "Internal Server Error" });

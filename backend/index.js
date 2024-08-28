@@ -52,12 +52,9 @@ app.get("*", (req, res) => {
 const initializeServer = async () => {
   try {
     await initializeDB();
-    console.log("db initialized");
-    app.listen(5000, () => {
-      console.log("Server is running on http://localhost:5000");
-    });
+
+    app.listen(5000);
   } catch (error) {
-    console.log(`Error: ${error.message}`);
     process.exit(1);
   }
 };

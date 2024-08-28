@@ -71,7 +71,7 @@ class Header extends Component {
 
       if (response.ok) {
         const finalData = await response.json();
-        console.log("final Data: ", finalData);
+
         this.setState({
           userImage: finalData.userImage,
           userName: finalData.displayName,
@@ -139,7 +139,6 @@ class Header extends Component {
         toast.error("unable to logout");
       }
     } catch (error) {
-      console.log("error while logging out : ", error);
       toast.error("An error occured during logout");
     }
   };
@@ -176,7 +175,6 @@ class Header extends Component {
       showLanguageContainer,
       showMenuContainer,
     } = this.state;
-    console.log("showMenuContainer", showMenuContainer);
 
     return (
       <LanguageAndAccessibilityContext.Consumer>
@@ -187,7 +185,7 @@ class Header extends Component {
             fontSizeRatio: fsr,
             showUnderLines: sUl,
           } = value;
-          console.log("showUnderLines:", sUl);
+
           const { request, home, creator, editor, logout, invCode } =
             getSectionData(headerSectionContent, activeLanguage);
           const selectedLanguage = languagesList.filter(

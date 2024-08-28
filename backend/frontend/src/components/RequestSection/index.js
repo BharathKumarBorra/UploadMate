@@ -175,7 +175,6 @@ class RequestSection extends Component {
           });
         }
       } catch (error) {
-        console.error("Error during invitation code check:", error);
         this.setState({
           invitationError: "An unexpected error occurred. Please try again.",
         });

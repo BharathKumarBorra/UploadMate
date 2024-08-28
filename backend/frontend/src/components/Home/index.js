@@ -24,7 +24,6 @@ const Home = () => {
       {(value) => {
         const { activeLanguage, fontSizeRatio, showInGray } = value;
         const fsr = fontSizeRatio;
-        console.log("home section Ratio: ", fontSizeRatio);
         const { upperDescription, mainDescription, lowerDescription } =
           getSectionData(homeSectionContent, activeLanguage);
 

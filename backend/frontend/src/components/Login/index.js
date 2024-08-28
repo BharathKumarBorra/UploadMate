@@ -55,13 +55,11 @@ class Login extends Component {
           loading: false,
         });
       } else {
-        console.log(response.statusText);
         this.setState({
           loading: false,
         });
       }
     } catch (error) {
-      console.error("Error checking authentication status:", error);
       this.setState({
         loading: false,
       });
@@ -141,7 +139,6 @@ class Login extends Component {
             showUnderLines: sUl,
           } = value;
           const fsr = fontSizeRatio;
-          console.log(fontSizeRatio);
 
           return (
             <div className={`${showInGray && "show-in-gray"} bg-container`}>

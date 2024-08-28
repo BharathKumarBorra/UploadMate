@@ -124,7 +124,6 @@ class EditorSectionRequests extends Component {
       }
     } catch (error) {
       toast.error("Failed to delete");
-      console.log("error occurred: ", error);
     }
   };
 
@@ -159,15 +158,12 @@ class EditorSectionRequests extends Component {
       );
 
       const responseData = await response.json();
-      console.log("upload response data: ", responseData);
+
       if (response.ok) {
         this.setState({
           uploadResponse: "SUCCESS",
           uploadResponseMessage: successMessage,
         });
-        console.log("Video uploaded successfully:", responseData);
-        // window.location.reload(); // Reload the page
-        // alert("Video uploaded successfully");
       } else {
         if (response.status === 403) {
           if (responseData.reason === "video quotaExceeded") {
@@ -208,12 +204,8 @@ class EditorSectionRequests extends Component {
             uploadResponseImg: errorWhileUploading,
           });
         }
-
-        console.log("response of error", response);
-        // alert("Error while uploading");
       }
     } catch (error) {
-      console.error("Error uploading video:", error);
       this.setState({
         uploadResponse: "FAILURE",
         uploadResponseMessage: "Error while uploading video",
@@ -239,8 +231,6 @@ class EditorSectionRequests extends Component {
         toast.error("Error while Resending.Please try again.");
       }
     } catch (error) {
-      console.log("Error in resending:", error);
-
       toast.error("Error while Resending.Please try again.");
     }
   };
@@ -408,7 +398,7 @@ class EditorSectionRequests extends Component {
             showUnderLines: sUl,
           } = value;
           const fsr = fontSizeRatio;
-          console.log("editor section ratio: ", fontSizeRatio);
+
           const {
             renderRequestsSectionContent,
             renderFetchingErrorContent,

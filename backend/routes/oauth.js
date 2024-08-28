@@ -8,9 +8,6 @@ require("dotenv").config();
 router.get("/oauth/status", async (req, res) => {
   const token = req.cookies.jwtToken; // Ensure this matches the cookie name used throughout
 
-  console.log("Backend cookies:", req.cookies);
-  console.log("Token from cookies:", token);
-
   if (!token) {
     return res.status(200).json({ authenticated: false }); // Explicitly send JSON response
   }
@@ -23,13 +20,11 @@ router.get("/oauth/status", async (req, res) => {
     const userDetailsObj = await mdb.get(getUserDetailsQuery, [email]);
 
     if (!userDetailsObj) {
-      console.log("User not found");
       return res.status(200).json({ authenticated: false }); // Explicitly send JSON response
     }
 
     res.status(200).json({ authenticated: true }); // Explicitly send JSON response
   } catch (err) {
-    console.error("Token verification failed:", err);
     res.status(200).json({ authenticated: false }); // Explicitly send JSON response
   }
 });
@@ -74,7 +69,6 @@ router.get(
 router.get("/logout", (req, res) => {
   try {
     const token = req.cookies.token;
-    console.log("token for logout: ", token);
 
     res.cookie("token", token, {
       secure: true,
@@ -86,7 +80,6 @@ router.get("/logout", (req, res) => {
 
     return res.status(200).json({ message: "Successfully logged out" });
   } catch (error) {
-    console.log("error while loggin out: ", error);
     return res
       .status(500)
       .json({ message: "An unexpected error occurred during logout" });

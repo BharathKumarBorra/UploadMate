@@ -63,8 +63,6 @@ const deleteFromCloudinary = async (
   } catch (error) {
     // Rollback transaction on error
     await mdb.run("ROLLBACK;");
-    console.error(`Error deleting ${resourceType} from Cloudinary:`, error);
-    // For handling error manually if any error occurs
   }
 };
 
@@ -97,7 +95,6 @@ router.delete(
       const deleteResponse = await mdb.run(deleteRequest, [videoId]);
       response.json({ message: "Video deleted successfully", deleteResponse });
     } catch (error) {
-      console.error("Error deleting video:", error);
       response
         .status(500)
         .json({ error: "Failed to delete video. Please try again." });
@@ -150,7 +147,6 @@ router.post(
       // If all checks pass, return a success response
       response.status(200).json({ message: "Invitation code is valid" });
     } catch (error) {
-      console.log("Error in checking invitation code: ", error);
       response.status(500).json({
         message: "Internal server error, unable to check invitation code",
       });
@@ -182,7 +178,7 @@ router.post(
       const creatorUserNameResponse = await mdb.get(creatorUserNameQuery, [
         creatorInvitationCode,
       ]);
-      console.log("creator user name Response: ", creatorUserNameResponse);
+
       const creatorUserName = creatorUserNameResponse.username;
 
       // Upload thumbnail to Cloudinary
@@ -233,10 +229,6 @@ router.put(
   async (request, response) => {
     const { videoId } = request.params;
     const { creatorResponse } = request.body;
-    console.log(
-      "for approving request refreshToken: ",
-      request.user.refresh_token
-    );
 
     let editorRequestStatus;
 
@@ -276,7 +268,6 @@ router.put(
       const dbResponse = await mdb.run(updateRequestStatusQuery, queryParams);
       response.send(dbResponse);
     } catch (error) {
-      console.error("Error updating request status:", error);
       response.status(500).send("Error updating request status");
     }
   }
@@ -310,8 +301,6 @@ router.post("/upload-video", ensureAuthenticated, async (req, res) => {
   };
 
   try {
-    console.log("video id is :", videoId);
-
     const getVideoDetails = `SELECT * FROM videos WHERE id=?;`;
     const getVideoDetailsResponse = await mdb.get(getVideoDetails, [videoId]);
 
@@ -331,12 +320,6 @@ router.post("/upload-video", ensureAuthenticated, async (req, res) => {
       video_public_id,
       thumbnail_public_id,
     } = getVideoDetailsResponse;
-
-    console.log("title, description:", title, description);
-    console.log(
-      "this is the refreshToken while uploading video: ",
-      video_refresh_token
-    );
 
     const newAccessToken = await getNewAccessToken(video_refresh_token);
 
@@ -385,7 +368,7 @@ router.post("/upload-video", ensureAuthenticated, async (req, res) => {
     if (!videoResponse.ok) {
       const errorBody = await videoResponse.text();
       const errorObj = JSON.parse(errorBody);
-      console.error("Error uploading video:", errorObj);
+
       cleanupFiles(videoFileName, thumbnailFileName);
 
       if (errorObj.error.code === 403) {
@@ -406,7 +389,7 @@ router.post("/upload-video", ensureAuthenticated, async (req, res) => {
 
     const videoResponseBody = await videoResponse.json();
     const youtubeVideoId = videoResponseBody.id;
-    console.log("Response from YouTube:", videoResponseBody);
+
     isVideoUploaded = true;
     cleanupFiles(videoFileName, null);
 
@@ -435,7 +418,7 @@ router.post("/upload-video", ensureAuthenticated, async (req, res) => {
     if (!thumbnailResponse.ok) {
       const errorBody = await thumbnailResponse.text();
       const errorObj = JSON.parse(errorBody);
-      console.error("Error uploading thumbnail:", errorObj);
+
       cleanupFiles(null, thumbnailFileName);
 
       if (errorObj.error.code === 403) {
@@ -459,13 +442,12 @@ router.post("/upload-video", ensureAuthenticated, async (req, res) => {
     }
 
     const thumbnailResponseBody = await thumbnailResponse.json();
-    console.log("Thumbnail uploaded successfully:", thumbnailResponseBody);
+
     cleanupFiles(null, thumbnailFileName);
 
     // Delete resources from Cloudinary
     await deleteFromCloudinary(videoId, video_public_id, "video");
     await deleteFromCloudinary(videoId, thumbnail_public_id, "image");
-    console.log("Successfully deleted from Cloudinary");
 
     // Update the video and thumbnail URLs in the database
     const updateVideoDetailsQuery = `UPDATE videos SET video_url=?, thumbnail_url=?, video_upload_status='uploaded' WHERE id=?;`;
@@ -477,7 +459,6 @@ router.post("/upload-video", ensureAuthenticated, async (req, res) => {
 
     res.json({ message: "Video and thumbnail uploaded successfully." });
   } catch (error) {
-    console.error("Error uploading video:", error);
     if (isVideoUploaded) {
       cleanupFiles(null, thumbnailFileName);
       return res

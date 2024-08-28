@@ -7,9 +7,6 @@ const { getDB } = require("./db");
 
 const ensureAuthenticated = async (req, res, next) => {
   const token = req.cookies.token;
-  console.log("backend cookies: ", req.cookies);
-
-  console.log("token from cookies:", token);
 
   if (!token) {
     return res.redirect(`${process.env.FRONTEND_URL}/login`);
@@ -23,14 +20,12 @@ const ensureAuthenticated = async (req, res, next) => {
     const userDetailsObj = await mdb.get(getUserDetailsQuery, [email]);
 
     if (!userDetailsObj) {
-      console.log("User not found");
       return res.redirect(`${process.env.FRONTEND_URL}/login`);
     }
 
     req.user = userDetailsObj;
     next();
   } catch (err) {
-    console.error("Token verification failed:", err);
     res.redirect(`${process.env.FRONTEND_URL}/login`);
   }
 };
@@ -55,16 +50,14 @@ const getNewAccessToken = async (refreshToken) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Error refreshing access token:", errorData);
+
       return null;
     }
 
     const data = await response.json();
-    console.log("New access token:", data.access_token);
 
     return data.access_token;
   } catch (error) {
-    console.error("Error refreshing access token:", error);
     return null;
   }
 };
@@ -96,7 +89,6 @@ const downloadFromUrl = async (fileUrl, videoId, fileType) => {
 
     return uniqueFilename;
   } catch (error) {
-    console.error("Download failed:", error);
     throw error;
   }
 };

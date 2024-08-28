@@ -17,7 +17,6 @@ const initializeDB = async () => {
       driver: sqlite3.Database,
     });
   } catch (error) {
-    console.log(`Error initializing DB: ${error.message}`);
     process.exit(1);
   }
 };

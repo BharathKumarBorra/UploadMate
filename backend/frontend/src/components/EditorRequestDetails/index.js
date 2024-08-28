@@ -62,7 +62,6 @@ class EditorRequestDetails extends Component {
   componentDidMount() {
     const { match } = this.props;
     const { videoId } = match.params;
-    console.log("videoId: ", videoId);
 
     this.getRequestDetails(videoId);
   }
@@ -87,7 +86,7 @@ class EditorRequestDetails extends Component {
         return;
       }
       const eachItem = await response.json();
-      console.log("fetched data: ", eachItem);
+
       const updatedData = {
         videoId: eachItem.id,
         videoUrl: eachItem.video_url,
@@ -187,13 +186,12 @@ class EditorRequestDetails extends Component {
       );
 
       const responseData = await response.json();
-      console.log("upload response data: ", responseData);
+
       if (response.ok) {
         this.setState({
           uploadResponse: "SUCCESS",
           uploadResponseMessage: successMessage,
         });
-        console.log("Video uploaded successfully:", responseData);
       } else {
         if (response.status === 403) {
           if (responseData.reason === "video quotaExceeded") {
@@ -234,9 +232,6 @@ class EditorRequestDetails extends Component {
             uploadResponseImg: errorWhileUploading,
           });
         }
-
-        console.log("response of error", response);
-        // alert("Error while uploading");
       }
     } catch (error) {
       console.error("Error uploading video:", error);
@@ -564,7 +559,7 @@ class EditorRequestDetails extends Component {
         {(value) => {
           const { activeLanguage, fontSizeRatio, showInGray } = value;
           const fsr = fontSizeRatio;
-          console.log("editor request details ratio:", fontSizeRatio);
+
           const {
             renderRequestDetailsContent,
             renderFetchingErrorContent,
