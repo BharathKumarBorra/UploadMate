@@ -4,6 +4,7 @@ import { TailSpin } from "react-loader-spinner";
 import Footer from "../Footer";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import AccessibilitySection from "../AccessibilitySection";
+
 import {
   LoginContainer,
   HeaderContainer,
@@ -26,6 +27,8 @@ import {
 } from "./styledComponents";
 import { loginSectionContent } from "./languageContent";
 import { getSectionData } from "../Header/languageContent";
+
+const proxyLogo = "/proxy_logo.png";
 
 class Login extends Component {
   constructor(props) {
@@ -83,10 +86,7 @@ class Login extends Component {
       <LoginContainer>
         <HeaderContainer>
           <StyledAnchorTag href="https://youtube-proxy1.onrender.com">
-            <ProxyLogo
-              alt="proxy-logo"
-              src="https://res.cloudinary.com/drbnxuf21/image/upload/v1724861187/yjyhndpczwgeln8rounu.png"
-            />
+            <ProxyLogo alt="proxy-logo" src={proxyLogo} />
             <ProxyName>Proxy</ProxyName>
           </StyledAnchorTag>
 

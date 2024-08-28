@@ -3,7 +3,6 @@ import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import LanguageAndAccessibilityContext from "../../context/languageAndAccessibilityContext";
 import { IoMdClose } from "react-icons/io";
-import defaultUserImage from "./default-avatar-profile-icon-vector-social-media-user-image-182145777.webp";
 import {
   HeaderContainer,
   ProxyLogo,
@@ -45,6 +44,9 @@ const languagesList = [
   { language: "తెలుగు", code: "TE" },
   { language: "اردو", code: "UR" },
 ];
+
+const defaultUserImage = "/defaultUserImage.webp";
+const proxyLogo = "/proxy_logo.png";
 
 class Header extends Component {
   state = {
@@ -196,10 +198,7 @@ class Header extends Component {
           return (
             <HeaderContainer>
               <StyledLink to="/">
-                <ProxyLogo
-                  alt="proxy-logo"
-                  src="https://res.cloudinary.com/drbnxuf21/image/upload/v1724861187/yjyhndpczwgeln8rounu.png"
-                />
+                <ProxyLogo alt="proxy-logo" src={proxyLogo} />
                 <ProxyName>Proxy</ProxyName>
               </StyledLink>
 
