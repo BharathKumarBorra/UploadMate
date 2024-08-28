@@ -7,7 +7,7 @@ require("dotenv").config(); // Load environment variables from .env file
 
 // Route to check the authentication status of the user
 router.get("/oauth/status", async (req, res) => {
-  const token = req.cookies.jwtToken; // Retrieve the JWT token from the cookies
+  const token = req.cookies.token; // Retrieve the JWT token from the cookies
 
   if (!token) {
     return res.status(200).json({ authenticated: false }); // If no token is present, respond with not authenticated
@@ -41,6 +41,7 @@ router.get(
     }
 
     const token = req.user.token; // Retrieve the token from the user object
+
     res.cookie("token", token, {
       secure: true,
       sameSite: "None",
