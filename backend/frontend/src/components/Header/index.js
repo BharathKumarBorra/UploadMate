@@ -126,10 +126,13 @@ class Header extends Component {
   onLogout = async () => {
     try {
       // Make a request to the backend logout route
-      const response = await fetch("https://youtube-timer1/logout", {
-        method: "GET",
-        credentials: "include", // Ensure cookies are sent with the request
-      });
+      const response = await fetch(
+        "https://youtube-timer1.onrender.com/logout",
+        {
+          method: "GET",
+          credentials: "include", // Ensure cookies are sent with the request
+        }
+      );
       if (response.ok) {
         window.location.href = "/login";
       } else {
