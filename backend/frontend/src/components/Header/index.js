@@ -136,6 +136,7 @@ class Header extends Component {
         toast.error("unable to logout");
       }
     } catch (error) {
+      console.log("error while logging out : ", error);
       toast.error("An error occured during logout");
     }
   };

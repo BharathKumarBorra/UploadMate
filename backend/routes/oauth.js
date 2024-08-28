@@ -74,6 +74,7 @@ router.get(
 router.get("/logout", (req, res) => {
   try {
     const token = req.cookies.token;
+    console.log("token for logout: ", token);
 
     res.cookie("token", token, {
       secure: true,
@@ -85,6 +86,7 @@ router.get("/logout", (req, res) => {
 
     return res.status(200).send("Successfully logged out");
   } catch (error) {
+    console.log("error while loggin out: ", error);
     return res.status(500).send("An unexpected error occurred during logout.");
   }
 });
