@@ -35,9 +35,6 @@ passport.use(
         "profile", // Request access to the user's profile information
         "email", // Request access to the user's email address
         "https://www.googleapis.com/auth/youtube.upload", // Request access to upload YouTube videos
-        "https://www.googleapis.com/auth/youtubepartner", // Request access to YouTube Partner APIs
-        "https://www.googleapis.com/auth/youtube", // Request access to YouTube Data API
-        "https://www.googleapis.com/auth/youtube.force-ssl", // Request access to manage YouTube videos securely
       ],
       accessType: "offline", // Request offline access to get a refresh token
       prompt: "consent select_account", // Prompt user to select an account and give consent

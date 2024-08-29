@@ -60,9 +60,6 @@ router.get(
       "profile",
       "email",
       "https://www.googleapis.com/auth/youtube.upload",
-      "https://www.googleapis.com/auth/youtubepartner",
-      "https://www.googleapis.com/auth/youtube",
-      "https://www.googleapis.com/auth/youtube.force-ssl",
     ],
     accessType: "offline", // Request offline access to get a refresh token
     prompt: "consent select_account", // Prompt the user to select an account and give consent
