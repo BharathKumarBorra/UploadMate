@@ -230,10 +230,11 @@ class RequestSection extends Component {
   onChangeVideo = (event) => {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 256 * 1024 * 1024 * 1024) {
-        // Check if file size is greater than 256GB
+      if (file.size > 100 * 1024 * 1024) {
+        // Actuallually it should be 256gb . But due to storage issues, I am only using 100mb
+        // Check if file size is greater than 256GB   (Since I don't have storage to save large files I am using 100mb max)
         this.setState({
-          videoError: "Video file size should not exceed 256GB.",
+          videoError: "Video file size should not exceed 100MB", // change it to 256 after improving storage capacity
           videoUrl: "", // Reset the video URL
         });
         event.target.value = null; // Reset the file input
