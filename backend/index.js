@@ -3,7 +3,6 @@ const cookieParser = require("cookie-parser");
 const { v2 } = require("cloudinary");
 const passport = require("./oauth/passportConfig");
 const cors = require("cors");
-const path = require("path");
 
 const { initializeDB } = require("./db");
 require("dotenv").config(); // Load environment variables from .env file
@@ -49,14 +48,6 @@ app.use(oauthRoutes);
 app.use(requestDetailsRoutes);
 app.use(requestModificationRoutes);
 app.use(userDetailsRoutes);
-
-// Serve static files from the React app's build directory
-app.use(express.static(path.join(__dirname, "frontend/build")));
-
-// Catch-all handler to serve the React app's index.html file for any unknown routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/build/index.html"));
-});
 
 // Function to initialize the server and connect to the database
 const initializeServer = async () => {
