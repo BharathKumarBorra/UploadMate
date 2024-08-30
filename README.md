@@ -1,5 +1,3 @@
-Here's the text for your README file that you can directly paste:
-
 ````markdown
 # YouTube Proxy
 
@@ -31,7 +29,7 @@ YouTube Proxy is a web application that facilitates seamless collaboration betwe
 
    ```bash
    git clone https://github.com/yourusername/youtube-proxy1.git
-   cd youtube-proxy
+   cd youtube-proxy1
    ```
 ````
 
@@ -42,13 +40,13 @@ YouTube Proxy is a web application that facilitates seamless collaboration betwe
    ```bash
    cd backend
    npm install
-   cd ../frontend
+   cd frontend
    npm install
    ```
 
 3. **Environment Variables**
 
-   Fill .env file it with your Google OAuth credentials and other necessary environment variables.
+   Copy the `.env.example` file to `.env` and fill in your actual credentials and configuration values:
 
 4. **Start the Application**
 

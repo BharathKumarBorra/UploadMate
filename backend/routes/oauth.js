@@ -43,6 +43,7 @@ router.get(
     const token = req.user.token; // Retrieve the token from the user object
 
     res.cookie("token", token, {
+      //configure according to how you deploy the application.
       maxAge: 30 * 24 * 60 * 60 * 1000, // Set the cookie to expire in 30 days
     });
 
