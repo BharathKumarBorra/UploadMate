@@ -1,4 +1,3 @@
-````markdown
 # YouTube Proxy
 
 YouTube Proxy is a web application that facilitates seamless collaboration between YouTube creators and editors. The application allows editors to upload videos to YouTube on behalf of creators after the creators explicitly approve the request. The platform ensures secure and efficient management of video uploads, even when the creator cannot upload videos directly due to network issues or other constraints.
@@ -31,7 +30,6 @@ YouTube Proxy is a web application that facilitates seamless collaboration betwe
    git clone https://github.com/yourusername/youtube-proxy1.git
    cd youtube-proxy1
    ```
-````
 
 2. **Install Dependencies**
 
@@ -46,7 +44,7 @@ YouTube Proxy is a web application that facilitates seamless collaboration betwe
 
 3. **Environment Variables**
 
-   Copy the `.env.example` file to `.env` and fill in your actual credentials and configuration values:
+   Replace the name `.env.example` with `.env` and fill in your actual credentials and configuration values.
 
 4. **Start the Application**
 
