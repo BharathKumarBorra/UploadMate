@@ -1,6 +1,6 @@
-# YouTube Proxy
+# Upload Mate
 
-YouTube Proxy is a web application that facilitates seamless collaboration between YouTube creators and editors. The application allows editors to upload videos to YouTube on behalf of creators after the creators explicitly approve the request. The platform ensures secure and efficient management of video uploads, even when the creator cannot upload videos directly due to network issues or other constraints.
+Upload Mate is a web application that facilitates seamless collaboration between YouTube creators and editors. The application allows editors to upload videos to YouTube on behalf of creators after the creators explicitly approve the request. The platform ensures secure and efficient management of video uploads, even when the creator cannot upload videos directly due to network issues or other constraints.
 
 ## Features
 
@@ -27,8 +27,8 @@ YouTube Proxy is a web application that facilitates seamless collaboration betwe
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/youtube-proxy1.git
-   cd youtube-proxy1
+   git clone https://github.com/BunnyBharath91/UploadMate.git
+   cd UploadMate
    ```
 
 2. **Install Dependencies**
@@ -59,7 +59,7 @@ YouTube Proxy is a web application that facilitates seamless collaboration betwe
 
 5. **Access the Application**
 
-   Open your browser and navigate to `http://localhost:3000` to start using the YouTube Proxy application.
+   Open your browser and navigate to `http://localhost:3000` to start using the Upload Mate application.
 
 ## Usage
 
