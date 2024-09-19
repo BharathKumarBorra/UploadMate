@@ -27,7 +27,7 @@ Upload Mate is a web application that facilitates seamless collaboration between
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/BharathKumarBorra/UploadMate.git
+   git clone https://github.com/BunnyBharath91/UploadMate.git
    cd UploadMate
    ```
 
